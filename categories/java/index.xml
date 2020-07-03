@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 犹豫就会失败</title>
-    <link>http://localhost:1313/post/</link>
-    <description>Recent content in Posts on 犹豫就会失败</description>
+    <title>JAVA on 犹豫就会失败</title>
+    <link>http://localhost:1313/categories/java/</link>
+    <description>Recent content in JAVA on 犹豫就会失败</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Fri, 03 Jul 2020 12:58:05 +0800</lastBuildDate>
     
-	<atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://localhost:1313/categories/java/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>http://localhost:1313/post/java%E5%8F%8D%E5%B0%84/</guid>
       <description>一、 Java中反射的机制 Java反射机制在程序运行时候，对于任意一个类都能动态的获取到类的属性以及方法。反射机制很重要的就是运行时，其使得我</description>
-    </item>
-    
-    <item>
-      <title>Java集合</title>
-      <link>http://localhost:1313/post/java%E9%9B%86%E5%90%88/</link>
-      <pubDate>Thu, 02 Jul 2020 23:37:46 +0800</pubDate>
-      
-      <guid>http://localhost:1313/post/java%E9%9B%86%E5%90%88/</guid>
-      <description>#dsdsds ###dsdsd dsdsdsds</description>
     </item>
     
   </channel>
