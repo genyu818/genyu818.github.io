@@ -1,23 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>JAVA on 犹豫就会失败</title>
-    <link>genyu818.github.io/categories/JAVA/</link>
-    <description>Recent content in JAVA on 犹豫就会失败</description>
+    <title>JAVA on LeaveIt</title>
+    <link>http://genyu818.github.io/categories/java/</link>
+    <description>Recent content in JAVA on LeaveIt</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <lastBuildDate>Fri, 03 Jul 2020 12:58:05 +0800</lastBuildDate>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Jul 2020 13:31:09 +0800</lastBuildDate>
     
-	<atom:link href="genyu818.github.io/categories/JAVA/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://genyu818.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>JAVA异常</title>
+      <link>http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/</link>
+      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
+      
+      <guid>http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/</guid>
+      <description>JAVA中的异常介绍 异常是什么？ 异常就是阻止程序运行的问题，当程序出现异常时候，系统会自动的生成一个Exception来通知程序程序作出相应的处理。Java的异常类型有很多种。 根据Java异常继承结构，我们可以知道所有的异常类都继承于Throwable类，而该类又有Error类，Exception类两个子类。而Exception类又分为受检查异常和非受检查异常（运行异常）。我们来逐一看一下。
+Java异常中的Error Error一般表示编译时或者系统错误，例如：虚拟机相关的错误，系统崩溃（例如：我们开发中有时会遇到的OutOfMemoryError）等。这种错误无法恢复或不可捕获,将导致应用程序中断,通常应用程序无法处理这些错误,因此也不应该试图用catch来进行捕获。
+一般来说出现Error我们不应该也无法去处理。
+Java中的Exception 上面我们有介绍，Java异常的中的Exception分为受检查异常和运行时异常（不受检查异常）。下面我们展开介绍。
+Java中的受检查类 受检查类指，编译器在编译过程中对于受检查异常类必须要进行try&amp;hellip;catch或者throw处理，否则无法通过编译。常见的受检查类包括： IO操作，ClassNotFindException，线程操作等。
+Java中的非受检查类（运行时异常） RuntimeException及其子类都统称为非受检查异常，例如：NullPointExecrption、NumberFormatException（字符串转换为数字）、ArrayIndexOutOfBoundsException（数组越界）、ClassCastException（类型转换错误）、ArithmeticException（算术错误）等。
+Java异常处理的基本语法 1.try-catch try{ //code that might generate exceptions }catch(Exception e){ //the code of handling exception1 }catch(Exception e){ //the code of handling exception2 } 要明白异常捕获，还要理解监控区域（guarded region）的概念。它是一段可能产生异常的代码，并且后面跟着处理这些异常的代码。
+因而可知，上述try-catch所描述的即是监控区域，关键词try后的一对大括号将一块可能发生异常的代码包起来，即为监控区域。Java方法在运行过程中发生了异常，则创建异常对象。将异常抛出监控区域之外，由Java运行时系统负责寻找匹配的catch子句来捕获异常。若有一个catch语句匹配到了，则执行该catch块中的异常处理代码，就不再尝试匹配别的catch块了。
+举个例子算术异常：
+public class TestException { public static void main(String[] args) { int a = 1; int b = 0; try { // try监控区域  if (b == 0) throw new ArithmeticException(); // 通过throw语句抛出异常  System.</description>
+    </item>
+    
+    <item>
       <title>JAVA反射</title>
-      <link>genyu818.github.io/posts/JAVA%E5%8F%8D%E5%B0%84/</link>
+      <link>http://genyu818.github.io/categories/java/java%E5%8F%8D%E5%B0%84/</link>
       <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
       
-      <guid>genyu818.github.io/posts/JAVA%E5%8F%8D%E5%B0%84/</guid>
-      <description>一、 Java中反射的机制 Java反射机制在程序运行时候，对于任意一个类都能动态的获取到类的属性以及方法。反射机制很重要的就是运行时，其使得我们可以在程序运行对未知的.class进行加载，编译，以及探索。 就是说Java程序在加载一个运行时才得知名称的.class文件，然后获悉其构造</description>
+      <guid>http://genyu818.github.io/categories/java/java%E5%8F%8D%E5%B0%84/</guid>
+      <description>一、 Java中反射的机制 Java反射机制在程序运行时候，对于任意一个类都能动态的获取到类的属性以及方法。反射机制很重要的就是运行时，其使得我们可以在程序运行对未知的.class进行加载，编译，以及探索。 就是说Java程序在加载一个运行时才得知名称的.class文件，然后获悉其构造过程，属性，以及方法。
+反射的核心是 JVM 在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。
+二、反射的主要用途 反射最重要的用途就是开发各种通用框架。 很多框架（比如 Spring）都是配置化的（比如通过 XML 文件配置 Bean），为了保证框架的通用性，它们可能需要根据配置文件加载不同的对象或类，调用不同的方法，这个时候就必须用到反射，运行时动态加载需要加载的对象。
+其次，当我们在使用 IDE(如 Eclipse，IDEA)时，当我们输入一个对象或类并想调用它的属性或方法时，一按点号，编译器就会自动列出它的属性或方法，这里就会用到反射
+三、反射的作用 我们定义一个FatherClass类， 还有一个SonClass类继承于FatherClass类。如下所示。可以看到测试类中变量以及方法的访问权限不是很规范，是为了更明显得查看测试结果而故意设置的，实际项目中不提倡这么写。
+FatherClass.java public class FatherClass { public String mFatherName; public int mFatherAge; public void printFatherMsg(){} } SonClass.java public class SonClass extends FatherClass{ private String mSonName; protected int mSonAge; public String mSonBirthday; public void printSonMsg(){ System.out.println(&amp;#34;Son Msg - name : &amp;#34; + mSonName + &amp;#34;; age : &amp;#34; + mSonAge); } private void setSonName(String name){ mSonName = name; } private void setSonAge(int age){ mSonAge = age; } private int getSonAge(){ return mSonAge; } private String getSonName(){ return mSonName; } } 一、获取类的变量信息 /** * 通过反射获取类的所有变量 */ private static void printFields(){ //1.</description>
+    </item>
+    
+    <item>
+      <title>JAVA反射</title>
+      <link>http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/</link>
+      <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
+      
+      <guid>http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/</guid>
+      <description>一、 Java中反射的机制 Java反射机制在程序运行时候，对于任意一个类都能动态的获取到类的属性以及方法。反射机制很重要的就是运行时，其使得我们可以在程序运行对未知的.class进行加载，编译，以及探索。 就是说Java程序在加载一个运行时才得知名称的.class文件，然后获悉其构造过程，属性，以及方法。
+反射的核心是 JVM 在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。
+二、反射的主要用途 反射最重要的用途就是开发各种通用框架。 很多框架（比如 Spring）都是配置化的（比如通过 XML 文件配置 Bean），为了保证框架的通用性，它们可能需要根据配置文件加载不同的对象或类，调用不同的方法，这个时候就必须用到反射，运行时动态加载需要加载的对象。
+其次，当我们在使用 IDE(如 Eclipse，IDEA)时，当我们输入一个对象或类并想调用它的属性或方法时，一按点号，编译器就会自动列出它的属性或方法，这里就会用到反射
+三、反射的作用 我们定义一个FatherClass类， 还有一个SonClass类继承于FatherClass类。如下所示。可以看到测试类中变量以及方法的访问权限不是很规范，是为了更明显得查看测试结果而故意设置的，实际项目中不提倡这么写。
+FatherClass.java public class FatherClass { public String mFatherName; public int mFatherAge; public void printFatherMsg(){} } SonClass.java public class SonClass extends FatherClass{ private String mSonName; protected int mSonAge; public String mSonBirthday; public void printSonMsg(){ System.out.println(&amp;#34;Son Msg - name : &amp;#34; + mSonName + &amp;#34;; age : &amp;#34; + mSonAge); } private void setSonName(String name){ mSonName = name; } private void setSonAge(int age){ mSonAge = age; } private int getSonAge(){ return mSonAge; } private String getSonName(){ return mSonName; } } 一、获取类的变量信息 /** * 通过反射获取类的所有变量 */ private static void printFields(){ //1.</description>
     </item>
     
   </channel>

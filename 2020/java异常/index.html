@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="WANG,HENGYU">
+  
+  
+  
+  <link rel="prev" href="http://genyu818.github.io/2020/ssm-demo1/" />
+  
+  <link rel="canonical" href="http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           JAVA异常 | LeaveIt
+       
+  </title>
+  <meta name="title" content="JAVA异常 | LeaveIt">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "http:\/\/genyu818.github.io"
+    },
+    "articleSection" : "posts",
+    "name" : "JAVA异常",
+    "headline" : "JAVA异常",
+    "description" : "JAVA中的异常介绍 异常是什么？ 异常就是阻止程序运行的问题，当程序出现异常时候，系统会自动的生成一个Exception来通知程序程序作出相应的处理。Java的异常类型有很多种。 根据Java异常继承结构，我们可以知道所有的异常类都继承于Throwable类，而该类又有Error类，Exception类两个子类。而Exception类又分为受检查异常和非受检查异常（运行异常）。我们来逐一看一下。\nJava异常中的Error Error一般表示编译时或者系统错误，例如：虚拟机相关的错误，系统崩溃（例如：我们开发中有时会遇到的OutOfMemoryError）等。这种错误无法恢复或不可捕获,将导致应用程序中断,通常应用程序无法处理这些错误,因此也不应该试图用catch来进行捕获。\n一般来说出现Error我们不应该也无法去处理。\nJava中的Exception 上面我们有介绍，Java异常的中的Exception分为受检查异常和运行时异常（不受检查异常）。下面我们展开介绍。\nJava中的受检查类 受检查类指，编译器在编译过程中对于受检查异常类必须要进行try\u0026hellip;catch或者throw处理，否则无法通过编译。常见的受检查类包括： IO操作，ClassNotFindException，线程操作等。\nJava中的非受检查类（运行时异常） RuntimeException及其子类都统称为非受检查异常，例如：NullPointExecrption、NumberFormatException（字符串转换为数字）、ArrayIndexOutOfBoundsException（数组越界）、ClassCastException（类型转换错误）、ArithmeticException（算术错误）等。\nJava异常处理的基本语法 1.try-catch try{ \/\/code that might generate exceptions }catch(Exception e){ \/\/the code of handling exception1 }catch(Exception e){ \/\/the code of handling exception2 } 要明白异常捕获，还要理解监控区域（guarded region）的概念。它是一段可能产生异常的代码，并且后面跟着处理这些异常的代码。\n因而可知，上述try-catch所描述的即是监控区域，关键词try后的一对大括号将一块可能发生异常的代码包起来，即为监控区域。Java方法在运行过程中发生了异常，则创建异常对象。将异常抛出监控区域之外，由Java运行时系统负责寻找匹配的catch子句来捕获异常。若有一个catch语句匹配到了，则执行该catch块中的异常处理代码，就不再尝试匹配别的catch块了。\n举个例子算术异常：\npublic class TestException { public static void main(String[] args) { int a = 1; int b = 0; try { \/\/ try监控区域  if (b == 0) throw new ArithmeticException(); \/\/ 通过throw语句抛出异常  System.",
+    "inLanguage" : "en-us",
+    "author" : "WANG,HENGYU",
+    "creator" : "WANG,HENGYU",
+    "publisher": "WANG,HENGYU",
+    "accountablePerson" : "WANG,HENGYU",
+    "copyrightHolder" : "WANG,HENGYU",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-07-07 13:31:09 \u002b0800 CST",
+    "dateModified" : "2020-07-07 13:31:09 \u002b0800 CST",
+    "url" : "http:\/\/genyu818.github.io\/2020\/java%E5%BC%82%E5%B8%B8\/",
+    "wordCount" : "387",
+    "keywords" : [  "LeaveIt"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">LeaveIt</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">LeaveIt</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">JAVA异常</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="http://genyu818.github.io" rel="author">WANG,HENGYU</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2020-07-07 itemprop="datePublished">July 7, 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="http://genyu818.github.io/categories/java/"> JAVA </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h2 id="java中的异常介绍">JAVA中的异常介绍</h2>
+<p>异常是什么？ 异常就是阻止程序运行的问题，当程序出现异常时候，系统会自动的生成一个Exception来通知程序程序作出相应的处理。Java的异常类型有很多种。 根据Java异常继承结构，我们可以知道所有的异常类都继承于Throwable类，而该类又有Error类，Exception类两个子类。而Exception类又分为受检查异常和非受检查异常（运行异常）。我们来逐一看一下。</p>
+<h4 id="java异常中的error">Java异常中的Error</h4>
+<p>Error一般表示编译时或者系统错误，例如：虚拟机相关的错误，系统崩溃（例如：我们开发中有时会遇到的OutOfMemoryError）等。这种错误无法恢复或不可捕获,将导致应用程序中断,通常应用程序无法处理这些错误,因此也不应该试图用catch来进行捕获。</p>
+<p><strong>一般来说出现Error我们不应该也无法去处理。</strong></p>
+<h4 id="java中的exception">Java中的Exception</h4>
+<p>上面我们有介绍，Java异常的中的Exception分为受检查异常和运行时异常（不受检查异常）。下面我们展开介绍。</p>
+<h5 id="java中的受检查类">Java中的受检查类</h5>
+<p>受检查类指，编译器在编译过程中对于受检查异常类必须要进行<strong>try&hellip;catch</strong>或者<strong>throw</strong>处理，否则无法通过编译。常见的受检查类包括： IO操作，ClassNotFindException，线程操作等。</p>
+<h5 id="java中的非受检查类运行时异常">Java中的非受检查类（运行时异常）</h5>
+<p>RuntimeException及其子类都统称为非受检查异常，例如：NullPointExecrption、NumberFormatException（字符串转换为数字）、ArrayIndexOutOfBoundsException（数组越界）、ClassCastException（类型转换错误）、ArithmeticException（算术错误）等。</p>
+<h2 id="java异常处理的基本语法">Java异常处理的基本语法</h2>
+<h3 id="1try-catch">1.try-catch</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+    <span style="color:#75715e">//code that might generate exceptions    
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>Exception e<span style="color:#f92672">){</span>
+    <span style="color:#75715e">//the code of handling exception1
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>Exception e<span style="color:#f92672">){</span>
+    <span style="color:#75715e">//the code of handling exception2
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</code></pre></div><p>要明白异常捕获，还要理解<code>监控区域</code>（guarded region）的概念。它是一段可能产生异常的代码，并且后面跟着处理这些异常的代码。</p>
+<p>因而可知，上述<code>try-catch</code>所描述的即是监控区域，关键词<code>try</code>后的一对大括号将一块可能发生异常的代码包起来，即为监控区域。Java方法在运行过程中发生了异常，则创建异常对象。将异常抛出监控区域之外，由Java运行时系统负责寻找匹配的<code>catch</code>子句来捕获异常。若有一个<code>catch</code>语句匹配到了，则执行该<code>catch</code>块中的异常处理代码，就不再尝试匹配别的<code>catch</code>块了。</p>
+<p>举个例子算术异常：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestException</span> <span style="color:#f92672">{</span>  
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>  
+        <span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> 1<span style="color:#f92672">;</span>  
+        <span style="color:#66d9ef">int</span> b <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>  
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span> <span style="color:#75715e">// try监控区域               
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>b <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> ArithmeticException<span style="color:#f92672">();</span> <span style="color:#75715e">// 通过throw语句抛出异常  
+</span><span style="color:#75715e"></span>            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;a/b的值是：&#34;</span> <span style="color:#f92672">+</span> a <span style="color:#f92672">/</span> b<span style="color:#f92672">);</span>  
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;this will not be printed!&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>  
+        <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ArithmeticException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> <span style="color:#75715e">// catch捕捉异常  
+</span><span style="color:#75715e"></span>            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;程序出现异常，变量b不能为0！&#34;</span><span style="color:#f92672">);</span>  
+        <span style="color:#f92672">}</span>  
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;程序正常结束。&#34;</span><span style="color:#f92672">);</span>  
+    <span style="color:#f92672">}</span>  
+<span style="color:#f92672">}</span>  
+</code></pre></div><pre><code>运行结果是：
+D:\java&gt;java TestException
+ 
+程序出现异常，变量b不能为0！
+
+程序正常结束。
+</code></pre><p>Notes: <strong>Java通过异常类描述异常类型。对于有多个<code>catch</code>子句的异常程序而言，应该尽量将捕获底层异常类的<code>catch</code>子句放在前面，同时尽量将捕获相对高层的异常类的<code>catch</code>子句放在后面。否则，捕获底层异常类的<code>catch</code>子句将可能会被屏蔽。</strong></p>
+<p><code>RuntimeException</code>异常类包括运行时各种常见的异常，<code>ArithmeticException</code>类和<code>ArrayIndexOutOfBoundsException</code>类都是它的子类。因此，<code>RuntimeException</code>异常类的<code>catch</code>子句应该放在最后面，否则可能会屏蔽其后的特定异常处理或引起编译错误。</p>
+<h3 id="2-throw">2. throw</h3>
+<p>我们还可以用<code>throw</code>语句抛出明确的异常。<code>Throw</code>的语法形式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">throw</span> ThrowableInstance<span style="color:#f92672">;</span>
+</code></pre></div><p>这里的ThrowableInstance一定是<code>Throwable</code>类类型或者<code>Throwable</code>子类类型的一个对象。简单的数据类型，例如<code>int</code>，<code>char</code>,以及非<code>Throwable</code>类，例如<code>String</code>或<code>Object</code>，不能用作异常。有两种方法可以获取<code>Throwable</code>对象：在<code>catch</code>子句中使用参数或者使用<code>new</code>操作符创建。</p>
+<p>程序执行完<code>throw</code>语句之后立即停止；<code>throw</code>后面的任何语句不被执行，最邻近的<code>try</code>块用来检查它是否含有一个与异常类型匹配的<code>catch</code>语句。如果发现了匹配的块，控制转向该语句；如果没有发现，次包围的<code>try</code>块来检查，以此类推。如果没有发现匹配的<code>catch</code>块，默认异常处理程序中断程序的执行并且打印堆栈轨迹。</p>
+<p>例子创建并抛出异常：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestThrow</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">proc</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;demo&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>NullPointerException e<span style="color:#f92672">){</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Caught inside proc&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">throw</span> e<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String <span style="color:#f92672">[]</span> args<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            proc<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>NullPointerException e<span style="color:#f92672">){</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Recaught: &#34;</span><span style="color:#f92672">+</span>e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">D:<span style="color:#960050;background-color:#1e0010">\</span>java<span style="color:#f92672">&gt;</span>java TestThrow
+
+Caught inside proc
+
+Recaught: java<span style="color:#f92672">.</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">.</span><span style="color:#a6e22e">NullPointerException</span><span style="color:#f92672">:</span> demo
+</code></pre></div><p>该程序两次处理相同的错误，首先，<code>main()</code>方法设立了一个异常关系然后调用proc()。proc()方法设立了另一个异常处理关系并且立即抛出一个<code>NullPointerException</code>实例，<code>NullPointerException</code>在<code>main()</code>中被再次捕获。</p>
+<h3 id="3-throws">3. throws</h3>
+<p>如果一个方法可以导致一个异常但不处理它，它必须指定这种行为以使方法的调用者可以保护它们自己而不发生异常。要做到这点，我们可以在方法声明中包含一个<code>throws</code>子句。一个<code>throws</code>子句列举了一个方法可能引发的所有异常类型。这对于除了<code>Error</code>或<code>RuntimeException</code>及它们子类以外类型的所有异常是必要的。一个方法可以引发的所有其他类型的异常必须在<code>throws</code>子句中声明，否则会导致编译错误。</p>
+<p>如果我们不想处理一个方法所抛出的异常，可以使用<code>throws</code>语法如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestThrows</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">throw1</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IllegalAccessException <span style="color:#f92672">{</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Inside throw1 . &#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalAccessException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;demo&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            throw1<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>IllegalAccessException e <span style="color:#f92672">){</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Caught &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><code>Throws</code>抛出异常的规则：</p>
+<ul>
+<li>如果是不受检查异常（<code>unchecked exception</code>），即<code>Error</code>、<code>RuntimeException</code>或它们的子类，那么可以不使用<code>throws</code>关键字来声明要抛出的异常，编译仍能顺利通过，但在运行时会被系统抛出。</li>
+<li>必须声明方法可抛出的任何检查异常（<code>checked exception</code>）。即如果一个方法可能出现受可查异常，要么用<code>try-catch</code>语句捕获，要么用<code>throws</code>子句声明将它抛出，否则会导致编译错误</li>
+<li>仅当抛出了异常，该方法的调用者才必须处理或者重新抛出该异常。当方法的调用者无力处理该异常的时候，应该继续抛出，而不是囫囵吞枣。</li>
+<li>调用方法必须遵循任何可查异常的处理和声明规则。若覆盖一个方法，则不能声明与覆盖方法不同的异常。声明的任何异常必须是被覆盖方法所声明异常的同类或子类。</li>
+</ul>
+<h3 id="4finally">4.finally</h3>
+<p>引入<code>finally</code>语句的原因是我们希望一些代码总是能得到执行,无论try块中是否抛出异常。在Java中希望除内存以外的资源恢复到它们的初始状态的时候需要使用的finally语句。例如操作文件时候（需要打开关闭），网络连接时候。</p>
+<p><code>finally</code>创建的代码块在<code>try/catch</code>块完成之后另一个<code>try/catch</code>出现之前执行。<code>finally</code>块无论有没有异常抛出都会执行。如果抛出异常，即使没有<code>catch</code>子句匹配，<code>finally</code>也会执行。一个方法将从一个<code>try/catch</code>块返回到调用程序的任何时候，经过一个未捕获的异常或者是一个明确的返回语句，<code>finally</code>子句在方法返回之前仍将执行。这在关闭文件句柄和释放任何在方法开始时被分配的其他资源是很有用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestFinally</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">proc1</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;inside proc1&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RuntimeException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;demo&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">finally</span><span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;proc1&#39;s finally&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">proc2</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;inside proc2&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span><span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;proc2&#39;s finally&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span> 
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">proc3</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;inside proc3&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">finally</span><span style="color:#f92672">{</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;proc3&#39;s finally&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String <span style="color:#f92672">[]</span> args<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            proc1<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>Exception e<span style="color:#f92672">){</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Exception caught&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        proc2<span style="color:#f92672">();</span>
+        proc3<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>该例子中，proc1()抛出了异常中断了<code>try</code>，它的<code>finally</code>子句在退出时执行。proc2的<code>try</code>语句通过<code>return</code>语句返回，但在返回之前<code>finally</code>语句执行。在proc3()中<code>try</code>语句正常执行，没有错误，<code>finally</code>语句也被执行。</p>
+<pre><code>程序输出结果：
+D:\java&gt;java TestFinally
+
+inside proc1
+
+proc1's finally
+
+Exception caught
+
+inside proc2
+ 
+proc2's finally
+ 
+inside proc3
+ 
+proc3's finally
+</code></pre><h2 id="java异常链">Java异常链</h2>
+<p>异常链顾名思义就是将异常发生的原因一个传一个串起来，即把底层的异常信息传给上层，这样逐层抛出。 Java API文档中给出了一个简单的模型：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>   
+    lowLevelOp<span style="color:#f92672">();</span>   
+<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>LowLevelException le<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>   
+    <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>HighLevelException<span style="color:#f92672">)</span> <span style="color:#66d9ef">new</span> HighLevelException<span style="color:#f92672">().</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>le<span style="color:#f92672">);</span>   
+<span style="color:#f92672">}</span>
+</code></pre></div><p>当程序捕获到了一个底层异常，在处理部分选择了继续抛出一个更高级别的新异常给此方法的调用者。 这样异常的原因就会逐层传递。这样，位于高层的异常递归调用getCause()方法，就可以遍历各层的异常原因。 这就是<code>Java异常链</code>的原理。异常链的实际应用很少，发生异常时候逐层上抛不是个好注意， 上层拿到这些异常又能奈之何？而且异常逐层上抛会消耗大量资源， 因为要保存一个完整的异常链信息。</p>
+<h2 id="java自定义异常">Java自定义异常</h2>
+<p>使用Java内置的异常类可以描述在编程时出现的大部分异常情况。除此之外，用户还可以自定义异常。用户自定义异常类，只需继承<code>Exception</code>类即可。</p>
+<p>在程序中使用自定义异常类，大体可分为以下几个步骤:</p>
+<ul>
+<li>创建自定义异常类。</li>
+<li>在方法中通过<code>throw</code>关键字抛出异常对象。</li>
+<li>如果在当前抛出异常的方法中处理异常，可以使用<code>try-catch</code>语句捕获并处理；否则在方法的声明处通过<code>throws</code>关键字指明要抛出给方法调用者的异常，继续进行下一步操作。</li>
+<li>在出现异常方法的调用者中捕获并处理异常。</li>
+</ul>
+<p>举例自定义异常：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyException</span> <span style="color:#66d9ef">extends</span> Exception <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> detail<span style="color:#f92672">;</span>
+    MyException<span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">){</span>
+        detail <span style="color:#f92672">=</span> a<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">toString</span><span style="color:#f92672">(){</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;MyException [&#34;</span><span style="color:#f92672">+</span> detail <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;]&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestMyException</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">compute</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> a<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> MyException<span style="color:#f92672">{</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Called compute(&#34;</span> <span style="color:#f92672">+</span> a <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;)&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>a <span style="color:#f92672">&gt;</span> 10<span style="color:#f92672">){</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> MyException<span style="color:#f92672">(</span>a<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Normal exit!&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String <span style="color:#f92672">[]</span> args<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">try</span><span style="color:#f92672">{</span>
+            compute<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+            compute<span style="color:#f92672">(</span>20<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span><span style="color:#66d9ef">catch</span><span style="color:#f92672">(</span>MyException me<span style="color:#f92672">){</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Caught &#34;</span> <span style="color:#f92672">+</span> me<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>该例子完全按照上述步骤。</p>
+<pre><code>运行结果如下：
+D:\java&gt;java TestMyException
+
+Called compute(1)
+
+Normal exit!
+
+Called compute(20)
+
+Caught MyException [20]
+</code></pre>
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>WANG,HENGYU </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/>http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/</span>
+            </p>
+            
+             
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="http://genyu818.github.io">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="http://genyu818.github.io/2020/ssm-demo1/" class="prev" rel="prev" title="SSM DEMO1"><i class="iconfont icon-left"></i>&nbsp;SSM DEMO1</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="http://genyu818.github.io">WANG,HENGYU</a> | </span> 
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

@@ -1,34 +1,29 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>犹豫就会失败</title>
-    <link>genyu818.github.io/</link>
-    <description>Recent content on 犹豫就会失败</description>
+    <title>LeaveIt on LeaveIt</title>
+    <link>http://genyu818.github.io/</link>
+    <description>Recent content in LeaveIt on LeaveIt</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <lastBuildDate>Fri, 03 Jul 2020 12:58:05 +0800</lastBuildDate>
-    
-	<atom:link href="genyu818.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Jul 2020 13:31:09 +0800</lastBuildDate>
+    <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>About</title>
-      <link>genyu818.github.io/about/</link>
-      <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
+      <title>Categories</title>
+      <link>http://genyu818.github.io/categories/</link>
+      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
       
-      <guid>genyu818.github.io/about/</guid>
-      <description>Hugo is a static site engine written in Go.
-It makes use of a variety of open source projects including:
- Cobra Viper J Walter Weatherman Cast  Learn more and contribute on GitHub.</description>
+      <guid>http://genyu818.github.io/categories/</guid>
+      <description></description>
     </item>
     
     <item>
-      <title>JAVA反射</title>
-      <link>genyu818.github.io/posts/JAVA%E5%8F%8D%E5%B0%84/</link>
-      <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
+      <title>Posts</title>
+      <link>http://genyu818.github.io/posts/</link>
+      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
       
-      <guid>genyu818.github.io/posts/JAVA%E5%8F%8D%E5%B0%84/</guid>
-      <description>一、 Java中反射的机制 Java反射机制在程序运行时候，对于任意一个类都能动态的获取到类的属性以及方法。反射机制很重要的就是运行时，其使得我们可以在程序运行对未知的.class进行加载，编译，以及探索。 就是说Java程序在加载一个运行时才得知名称的.class文件，然后获悉其构造</description>
+      <guid>http://genyu818.github.io/posts/</guid>
+      <description></description>
     </item>
     
   </channel>
