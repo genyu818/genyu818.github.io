@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>网络 on WANG, HENGYU</title>
+    <link>http://genyu818.github.io/tags/%E7%BD%91%E7%BB%9C/</link>
+    <description>Recent content in 网络 on WANG, HENGYU</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Jul 2020 10:12:07 +0800</lastBuildDate>
+    
+	<atom:link href="http://genyu818.github.io/tags/%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>五层协议</title>
+      <link>http://genyu818.github.io/2020/%E4%BA%94%E5%B1%82%E5%8D%8F%E8%AE%AE/</link>
+      <pubDate>Wed, 08 Jul 2020 10:12:07 +0800</pubDate>
+      
+      <guid>http://genyu818.github.io/2020/%E4%BA%94%E5%B1%82%E5%8D%8F%E8%AE%AE/</guid>
+      <description>计算机网络体系结构 计算机网络中有两种协议栈OSI协议和TCP/IP协议，为了方便我们中和了这两个协议的优点，采用五层协议的体系结构，这样既简洁，又清晰。
+应用层 我截取麻省Computer Network中对于应用层的定义。
+Sitting at Layer 7 &amp;ndash; the very top of the Open Systems Interconnection (OSI) communications model &amp;ndash; the application layer provides services for an application program to ensure that effective communication with another application program on a network is possible. The application layer should not be thought of as an application as most people understand it. Instead, the application layer is a component within an application that controls the communication method to other devices.</description>
+    </item>
+    
+  </channel>
+</rss>

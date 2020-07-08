@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noodp"/>
   <meta name="author" content="WANG,HENGYU">
-  
+  <meta name="description" content="一个记录很多东西的博客。">
   
   
   <link rel="prev" href="http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/" />
@@ -22,10 +22,10 @@
   <title>
        
        
-           SSM DEMO1 | LeaveIt
+           SSM DEMO1 | WANG, HENGYU
        
   </title>
-  <meta name="title" content="SSM DEMO1 | LeaveIt">
+  <meta name="title" content="SSM DEMO1 | WANG, HENGYU">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -46,7 +46,7 @@
     "articleSection" : "posts",
     "name" : "SSM DEMO1",
     "headline" : "SSM DEMO1",
-    "description" : "1.前言 最近在一家公司实习，之前一直没基础过JAVA后端，现在算是从0开始学习，想着线从头自己搭建出一个程序跑通，但是网上看了很多教程，有的太过于杂乱，有的就是把Google上的内容翻译一下直接搬了过来。所以写下这篇文章，希望对新手们有点帮助，大佬们轻喷谢谢！\n言归正传，到底什么是SSM框架？ The SSM framework is a combination of Spring MVC, Spring and Mybatis framework. It is a standard MVC pattern. 这是一段截取到的直白解释，SSM框架就是由Spring MVC, Spring and Mybatis组成遵循 MVC模式的框架。感觉说了等于不说，是不是？ 没关系我们直观的看一个图。\nSSM实现原理也好，配置方式也好，把那些先都放一边，先用大白话的方式看一下SSM框架到底是个什么东西。这样我们可以清晰的看到SSM框架就是Spring对Mybatis要求，让Mybatis去对数据库进行操作，然后对SpringMVC要求，把拿到并且处理好的数据传给Web。\n2.实战 1. 实战说明 非常简单，就是利用SSM框架以及SQL server实现一个简单登录，注册以及修改密码的小demo。 如果有时间以及经历，我将一直会维护下去，去在学习的过程中，添加更多的东西，例如增加一些功能，添加一些样式等等。\n2.jar需要的jar包 NOTES：博主最早使用Maven，但是发现Maven对新手并不是太友好，因为大家跟着教程去实现的时候，很容易看了很多教程导致版本不一致，重复多个版本jar包。\n我已经将该项目上传到GitHub上，可以根据需要自己去下载jar包。\nJar包下载",
+    "description" : "1.前言 最近在一家公司实习，之前一直没基础过JAVA后端，现在算是从0开始学习，想着线从头自己搭建出一个程序跑通，但是网上看了很多教程，有的太过于杂乱，有的就是把Google上的内容翻译一下直接搬了过来。所以写下这篇文章，希望对新手们有点帮助，大佬们轻喷谢谢！\n言归正传，到底什么是SSM框架？ The SSM framework is a combination of Spring MVC, Spring and Mybatis framework. It is a standard MVC pattern. 这是一段截取到的直白解释，SSM框架就是由Spring MVC, Spring and Mybatis组成遵循 MVC模式的框架。感觉说了等于不说，是不是？ 没关系我们直观的看一个图。\nSSM实现原理也好，配置方式也好，把那些先都放一边，先用大白话的方式看一下SSM框架到底是个什么东西。这样我们可以清晰的看到SSM框架就是Spring对Mybatis要求，让Mybatis去对数据库进行操作，然后对SpringMVC要求，把拿到并且处理好的数据传给Web。\n2.实战 1. 实战说明 非常简单，就是利用SSM框架以及SQL server实现一个简单登录，注册以及修改密码的小demo。 如果有时间以及经历，我将一直会维护下去，去在学习的过程中，添加更多的东西，例如增加一些功能，添加一些样式等等。\n2.jar需要的jar包 NOTES：博主最早使用Maven，但是发现Maven对新手并不是太友好，因为大家跟着教程去实现的时候，很容易看了很多教程导致版本不一致，重复多个版本jar包。\n我已经将该项目上传到GitHub上，可以根据需要自己去下载jar包。\nJar包下载\n3. 准备数据库（SQL server） 创建数据库，并且把id设为自增长，然后随便插入两条数据。\nCREATE TABLE user_db ( id int PRIMARY KEY IDENTITY, user_name varchar(255), user_password varchar(255), ) INSERT INTO dbo.user_db (user_name, user_password) VALUES \u0026#39;wang\u0026#39;, \u0026#39;wang123\u0026#39; INSERT INTO dbo.user_db (user_name, user_password) VALUES \u0026#39;li\u0026#39;, \u0026#39;li123\u0026#39; Notes：推荐一个非常好用的sql语句的互换网站 Mysql 转SQL server。",
     "inLanguage" : "en-us",
     "author" : "WANG,HENGYU",
     "creator" : "WANG,HENGYU",
@@ -57,8 +57,8 @@
     "datePublished": "2020-07-07 11:41:15 \u002b0800 CST",
     "dateModified" : "2020-07-07 11:41:15 \u002b0800 CST",
     "url" : "http:\/\/genyu818.github.io\/2020\/ssm-demo1\/",
-    "wordCount" : "40",
-    "keywords" : [  "LeaveIt"]
+    "wordCount" : "380",
+    "keywords" : [ "SSM", "WANG, HENGYU"]
 }
 </script>
 
@@ -72,7 +72,7 @@
         <nav class="navbar">
     <div class="container">
         <div class="navbar-header header-logo">
-        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">LeaveIt</a>
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">WANG, HENGYU</a>
         </div>
         <div class="menu navbar-right">
                 
@@ -91,7 +91,7 @@
 <nav class="navbar-mobile" id="nav-mobile" style="display: none">
      <div class="container">
         <div class="navbar-header">
-            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">LeaveIt</a></div>
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">WANG, HENGYU</a></div>
             <div class="menu-toggle">
                 <span></span><span></span><span></span>
             </div>
@@ -160,6 +160,166 @@
 <p><strong>NOTES：博主最早使用Maven，但是发现Maven对新手并不是太友好，因为大家跟着教程去实现的时候，很容易看了很多教程导致版本不一致，重复多个版本jar包。</strong></p>
 <p>我已经将该项目上传到GitHub上，可以根据需要自己去下载jar包。</p>
 <p><a href="https://github.com/genyu818/SSM-DEMO">Jar包下载</a></p>
+<h4 id="3-准备数据库sql-server">3. 准备数据库（SQL server）</h4>
+<p>创建数据库，并且把id设为自增长，然后随便插入两条数据。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> user_db
+(
+id int <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> <span style="color:#66d9ef">IDENTITY</span>,
+user_name varchar(<span style="color:#ae81ff">255</span>),
+user_password varchar(<span style="color:#ae81ff">255</span>),
+)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> dbo.user_db (user_name, user_password) <span style="color:#66d9ef">VALUES</span> <span style="color:#e6db74">&#39;wang&#39;</span>, <span style="color:#e6db74">&#39;wang123&#39;</span>
+<span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> dbo.user_db (user_name, user_password) <span style="color:#66d9ef">VALUES</span> <span style="color:#e6db74">&#39;li&#39;</span>, <span style="color:#e6db74">&#39;li123&#39;</span>
+</code></pre></div><p>Notes：推荐一个非常好用的sql语句的互换网站 <a href="http://www.sqlines.com/online">Mysql 转SQL server</a>。</p>
+<h4 id="4-数据库配置">4. 数据库配置</h4>
+<p>在根目录<code>src</code>下建立<code>db.properties</code></p>
+<pre><code>jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc.url=jdbc:sqlserver://127.0.0.1:1433;DatabaseName=数据库名称
+jdbc.uid=sa
+jdbc.pwd=wanghengyu123
+</code></pre><h4 id="5-spring整合mybatis连接数据库">5. Spring整合Mybatis连接数据库</h4>
+<h5 id="51-程序结构">5.1 程序结构</h5>
+<p>首先要建立一些package <img src="/SSM-DEMO1.3.png" alt="SSM-DEMO1.3"></p>
+<h5 id="52-实体类">5.2 实体类</h5>
+<p>然后在<code>entity</code>下新建一个<code>User.java</code>代表我们的实体类，该类中就是定义我们在数据库中新建表<code>user_db</code>中的属性，以及他们的构造方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> why.entity<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> javax.jws.soap.SOAPBinding<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">private</span> Integer id<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String user_name<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String user_password<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> Integer <span style="color:#a6e22e">getId</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> id<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setId</span><span style="color:#f92672">(</span>Integer id<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> id<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getUser_name</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> user_name<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUser_name</span><span style="color:#f92672">(</span>String user_name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user_name</span> <span style="color:#f92672">=</span> user_name<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getUser_password</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> user_password<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUser_password</span><span style="color:#f92672">(</span>String user_password<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user_password</span> <span style="color:#f92672">=</span> user_password<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h5 id="53-dao">5.3 Dao</h5>
+<p>然后我们在<code>dao</code>中新建<code>UserDao.java</code>用于定义我们需要对数据库操作的方法。<strong>为了更加便于理解，我们从一个功能开始做，等程序可以正常运行之后再逐步添加功能， 我们首先关注登录这个功能</strong>。对于登录功能，逻辑其实非常简单，我们在界面输入账号，密码程序去数据库查询，如果由数据登录成功，没有数据登录失败。那么这意味着，现在，此时此刻我们只需要对数据库进行查询操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> why.dao<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> why.entity.User<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> org.apache.ibatis.annotations.Param<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserDao</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">/**
+</span><span style="color:#75715e">     * 查找用户名和密码
+</span><span style="color:#75715e">     * @param user_name 登录用户名
+</span><span style="color:#75715e">     * @return
+</span><span style="color:#75715e">     */</span>
+    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">findByUsername</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@Param</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;user_name&#34;</span><span style="color:#f92672">)</span>String user_name<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><h5 id="54-配置数据库映射文件">5.4 配置数据库映射文件</h5>
+<p>在<code>UserDao</code>同文件夹下建立<code>UserMapper.xml</code>来使java文件和数据库建立联系。非常简单，给<code>findByUsername</code>映射一个sql语句实现一个功能，在我们这就是根据user_name去查询密码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#75715e">&lt;!DOCTYPE mapper PUBLIC &#34;-//mybatis.org//DTD Mapper 3.0//EN&#34; &#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;</span>
+<span style="color:#75715e">&lt;!--命名空间应该是对应接口的包名+接口名 --&gt;</span>
+
+<span style="color:#f92672">&lt;mapper</span> <span style="color:#a6e22e">namespace=</span><span style="color:#e6db74">&#34;why.dao.UserDao&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#75715e">&lt;!--id应该是接口中的方法，结果类型如没有配置别名则应该使用全名称 --&gt;</span>
+    <span style="color:#f92672">&lt;select</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;findByUsername&#34;</span> <span style="color:#a6e22e">resultType=</span><span style="color:#e6db74">&#34;why.entity.User&#34;</span> <span style="color:#a6e22e">parameterType=</span><span style="color:#e6db74">&#34;String&#34;</span><span style="color:#f92672">&gt;</span>
+		select * from dbo.user_db where user_name = #{user_name}
+	<span style="color:#f92672">&lt;/select&gt;</span>
+<span style="color:#f92672">&lt;/mapper&gt;</span>
+</code></pre></div><h5 id="55-使用spring去整合mybatis和数据库">5.5 使用Spring去整合Mybatis和数据库</h5>
+<p>在根目录<code>src</code>下建立<code>applicationContext.xml</code>用于Spring配置，这次实战目的是为了利用SSM跑通程序，所以不会对配置语法具体讲解，不过我在程序里进行备注，有兴趣的可以自行学习。</p>
+<p><strong>Notes：标注1中的<code>db.properties</code>，标注3，4中的包名要和自己的进行对应</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;beans</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span style="color:#a6e22e">xmlns:aop=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/aop&#34;</span>
+       <span style="color:#a6e22e">xmlns:tx=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/tx&#34;</span>
+       <span style="color:#a6e22e">xmlns:context=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/context&#34;</span>
+       <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/beans
+</span><span style="color:#e6db74">             http://www.springframework.org/schema/beans/spring-beans.xsd
+</span><span style="color:#e6db74">             http://www.springframework.org/schema/tx
+</span><span style="color:#e6db74">             http://www.springframework.org/schema/tx/spring-tx.xsd
+</span><span style="color:#e6db74">              http://www.springframework.org/schema/aop
+</span><span style="color:#e6db74">              http://www.springframework.org/schema/aop/spring-aop.xsd
+</span><span style="color:#e6db74">                http://www.springframework.org/schema/context
+</span><span style="color:#e6db74">              http://www.springframework.org/schema/context/spring-context.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+
+    <span style="color:#75715e">&lt;!--1 引入属性文件，在配置中占位使用 --&gt;</span>
+    <span style="color:#f92672">&lt;context:property-placeholder</span> <span style="color:#a6e22e">location=</span><span style="color:#e6db74">&#34;classpath*:db.properties&#34;</span> <span style="color:#f92672">/&gt;</span>
+
+    <span style="color:#75715e">&lt;!--2 配置C3P0数据源 --&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;datasource&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.mchange.v2.c3p0.ComboPooledDataSource&#34;</span> <span style="color:#a6e22e">destroy-method=</span><span style="color:#e6db74">&#34;close&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#75715e">&lt;!--驱动类名 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;driverClass&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${jdbc.driver}&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#75715e">&lt;!-- url --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;jdbcUrl&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${jdbc.url}&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#75715e">&lt;!-- 用户名 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;user&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${jdbc.uid}&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#75715e">&lt;!-- 密码 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;${jdbc.pwd}&#34;</span> <span style="color:#f92672">/&gt;</span>
+        <span style="color:#75715e">&lt;!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数  --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;acquireIncrement&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;5&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+        <span style="color:#75715e">&lt;!-- 初始连接池大小 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;initialPoolSize&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;10&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+        <span style="color:#75715e">&lt;!-- 连接池中连接最小个数 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;minPoolSize&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;5&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+        <span style="color:#75715e">&lt;!-- 连接池中连接最大个数 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;maxPoolSize&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;20&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+
+    <span style="color:#75715e">&lt;!--3 会话工厂bean sqlSessionFactoryBean --&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;sqlSessionFactory&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.mybatis.spring.SqlSessionFactoryBean&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#75715e">&lt;!-- 数据源 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;dataSource&#34;</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;datasource&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+        <span style="color:#75715e">&lt;!-- 别名 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;typeAliasesPackage&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;why.entities&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+        <span style="color:#75715e">&lt;!-- sql映射文件路径 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;mapperLocations&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;classpath*:why/dao/*Mapper.xml&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+
+    <span style="color:#75715e">&lt;!--4 自动扫描对象关系映射 --&gt;</span>
+        <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.mybatis.spring.mapper.MapperScannerConfigurer&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#75715e">&lt;!--指定会话工厂，如果当前上下文中只定义了一个则该属性可省去 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;sqlSessionFactoryBeanName&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;sqlSessionFactory&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+        <span style="color:#75715e">&lt;!-- 指定要自动扫描接口的基础包，实现接口 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;basePackage&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;why.dao&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+    <span style="color:#f92672">&lt;context:component-scan</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;why&#34;</span><span style="color:#f92672">&gt;&lt;/context:component-scan&gt;</span>
+
+    <span style="color:#75715e">&lt;!--5 声明式事务管理 --&gt;</span>
+    <span style="color:#75715e">&lt;!--定义事物管理器，由spring管理事务 --&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;transactionManager&#34;</span>
+          <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.jdbc.datasource.DataSourceTransactionManager&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;dataSource&#34;</span> <span style="color:#a6e22e">ref=</span><span style="color:#e6db74">&#34;datasource&#34;</span><span style="color:#f92672">&gt;&lt;/property&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+    <span style="color:#75715e">&lt;!--支持注解驱动的事务管理，指定事务管理器 --&gt;</span>
+    <span style="color:#f92672">&lt;tx:annotation-driven</span> <span style="color:#a6e22e">transaction-manager=</span><span style="color:#e6db74">&#34;transactionManager&#34;</span><span style="color:#f92672">/&gt;</span>
+    <span style="color:#75715e">&lt;!--6 容器自动扫描IOC组件  --&gt;</span>
+
+    <span style="color:#75715e">&lt;!--7 aspectj支持自动代理实现AOP功能 --&gt;</span>
+    <span style="color:#f92672">&lt;aop:aspectj-autoproxy</span> <span style="color:#a6e22e">proxy-target-class=</span><span style="color:#e6db74">&#34;true&#34;</span><span style="color:#f92672">&gt;&lt;/aop:aspectj-autoproxy&gt;</span>
+<span style="color:#f92672">&lt;/beans&gt;</span>
+</code></pre></div><h5 id="56-congratulation">5.6 Congratulation</h5>
+<p>直到现在你已经完成了SSM框架中的<strong>SM</strong>了（说的好像很猥琐）。大家可以自行去写一些测试类去测试（我实在太懒了！！！！！！！！）</p>
 
     </div>
 
@@ -187,6 +347,14 @@
   
     <div class="post-tags">
         
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="http://genyu818.github.io/tags/ssm/">
+                    #SSM</a></span>
+            
+            </section>
+        
         <section>
                 <a href="javascript:window.history.back();">back</a></span> · 
                 <span><a href="http://genyu818.github.io">home</a></span>
@@ -195,10 +363,10 @@
 
     <div class="post-nav">
         
-        <a href="http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/" class="prev" rel="prev" title="JAVA反射"><i class="iconfont icon-left"></i>&nbsp;JAVA反射</a>
+        <a href="http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/" class="prev" rel="prev" title="Java反射"><i class="iconfont icon-left"></i>&nbsp;Java反射</a>
          
         
-        <a href="http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/" class="next" rel="next" title="JAVA异常">JAVA异常&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/" class="next" rel="next" title="Java异常">Java异常&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
