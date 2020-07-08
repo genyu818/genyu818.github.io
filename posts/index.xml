@@ -1,51 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on LeaveIt</title>
+    <title>Posts on WANG, HENGYU</title>
     <link>http://genyu818.github.io/posts/</link>
-    <description>Recent content in Posts on LeaveIt</description>
+    <description>Recent content in Posts on WANG, HENGYU</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Jul 2020 13:31:09 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2020 12:58:05 +0800</lastBuildDate>
     
 	<atom:link href="http://genyu818.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>JAVA异常</title>
-      <link>http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/</link>
-      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
-      
-      <guid>http://genyu818.github.io/2020/java%E5%BC%82%E5%B8%B8/</guid>
-      <description>JAVA中的异常介绍 异常是什么？ 异常就是阻止程序运行的问题，当程序出现异常时候，系统会自动的生成一个Exception来通知程序程序作出相应的处理。Java的异常类型有很多种。 根据Java异常继承结构，我们可以知道所有的异常类都继承于Throwable类，而该类又有Error类，Exception类两个子类。而Exception类又分为受检查异常和非受检查异常（运行异常）。我们来逐一看一下。
-Java异常中的Error Error一般表示编译时或者系统错误，例如：虚拟机相关的错误，系统崩溃（例如：我们开发中有时会遇到的OutOfMemoryError）等。这种错误无法恢复或不可捕获,将导致应用程序中断,通常应用程序无法处理这些错误,因此也不应该试图用catch来进行捕获。
-一般来说出现Error我们不应该也无法去处理。
-Java中的Exception 上面我们有介绍，Java异常的中的Exception分为受检查异常和运行时异常（不受检查异常）。下面我们展开介绍。
-Java中的受检查类 受检查类指，编译器在编译过程中对于受检查异常类必须要进行try&amp;hellip;catch或者throw处理，否则无法通过编译。常见的受检查类包括： IO操作，ClassNotFindException，线程操作等。
-Java中的非受检查类（运行时异常） RuntimeException及其子类都统称为非受检查异常，例如：NullPointExecrption、NumberFormatException（字符串转换为数字）、ArrayIndexOutOfBoundsException（数组越界）、ClassCastException（类型转换错误）、ArithmeticException（算术错误）等。
-Java异常处理的基本语法 1.try-catch try{ //code that might generate exceptions }catch(Exception e){ //the code of handling exception1 }catch(Exception e){ //the code of handling exception2 } 要明白异常捕获，还要理解监控区域（guarded region）的概念。它是一段可能产生异常的代码，并且后面跟着处理这些异常的代码。
-因而可知，上述try-catch所描述的即是监控区域，关键词try后的一对大括号将一块可能发生异常的代码包起来，即为监控区域。Java方法在运行过程中发生了异常，则创建异常对象。将异常抛出监控区域之外，由Java运行时系统负责寻找匹配的catch子句来捕获异常。若有一个catch语句匹配到了，则执行该catch块中的异常处理代码，就不再尝试匹配别的catch块了。
-举个例子算术异常：
-public class TestException { public static void main(String[] args) { int a = 1; int b = 0; try { // try监控区域  if (b == 0) throw new ArithmeticException(); // 通过throw语句抛出异常  System.</description>
-    </item>
-    
-    <item>
-      <title>SSM DEMO1</title>
-      <link>http://genyu818.github.io/2020/ssm-demo1/</link>
-      <pubDate>Tue, 07 Jul 2020 11:41:15 +0800</pubDate>
-      
-      <guid>http://genyu818.github.io/2020/ssm-demo1/</guid>
-      <description>1.前言 最近在一家公司实习，之前一直没基础过JAVA后端，现在算是从0开始学习，想着线从头自己搭建出一个程序跑通，但是网上看了很多教程，有的太过于杂乱，有的就是把Google上的内容翻译一下直接搬了过来。所以写下这篇文章，希望对新手们有点帮助，大佬们轻喷谢谢！
-言归正传，到底什么是SSM框架？ The SSM framework is a combination of Spring MVC, Spring and Mybatis framework. It is a standard MVC pattern. 这是一段截取到的直白解释，SSM框架就是由Spring MVC, Spring and Mybatis组成遵循 MVC模式的框架。感觉说了等于不说，是不是？ 没关系我们直观的看一个图。
-SSM实现原理也好，配置方式也好，把那些先都放一边，先用大白话的方式看一下SSM框架到底是个什么东西。这样我们可以清晰的看到SSM框架就是Spring对Mybatis要求，让Mybatis去对数据库进行操作，然后对SpringMVC要求，把拿到并且处理好的数据传给Web。
-2.实战 1. 实战说明 非常简单，就是利用SSM框架以及SQL server实现一个简单登录，注册以及修改密码的小demo。 如果有时间以及经历，我将一直会维护下去，去在学习的过程中，添加更多的东西，例如增加一些功能，添加一些样式等等。
-2.jar需要的jar包 NOTES：博主最早使用Maven，但是发现Maven对新手并不是太友好，因为大家跟着教程去实现的时候，很容易看了很多教程导致版本不一致，重复多个版本jar包。
-我已经将该项目上传到GitHub上，可以根据需要自己去下载jar包。
-Jar包下载</description>
-    </item>
-    
-    <item>
-      <title>JAVA反射</title>
+      <title>Java反射</title>
       <link>http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/</link>
       <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
       

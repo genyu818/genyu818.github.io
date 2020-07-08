@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on LeaveIt</title>
+    <title>Categories on WANG, HENGYU</title>
     <link>http://genyu818.github.io/categories/</link>
-    <description>Recent content in Categories on LeaveIt</description>
+    <description>Recent content in Categories on WANG, HENGYU</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Jul 2020 13:31:09 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2020 12:58:05 +0800</lastBuildDate>
     
 	<atom:link href="http://genyu818.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,28 +14,10 @@
     <item>
       <title>JAVA</title>
       <link>http://genyu818.github.io/categories/java/</link>
-      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
+      <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
       
       <guid>http://genyu818.github.io/categories/java/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>实战</title>
-      <link>http://genyu818.github.io/categories/%E5%AE%9E%E6%88%98/</link>
-      <pubDate>Tue, 07 Jul 2020 11:41:15 +0800</pubDate>
-      
-      <guid>http://genyu818.github.io/categories/%E5%AE%9E%E6%88%98/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
-</rss>�一个运行时才得知名称的.class文件，然后获悉其构造过程，属性，以及方法。
-反射的核心是 JVM 在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。
-二、反射的主要用途 反射最重要的用途就是开发各种通用框架。 很多框架（比如 Spring）都是配置化的（比如通过 XML 文件配置 Bean），为了保证框架的通用性，它们可能需要根据配置文件加载不同的对象或类，调用不同的方法，这个时候就必须用到反射，运行时动态加载需要加载的对象。
-其次，当我们在使用 IDE(如 Eclipse，IDEA)时，当我们输入一个对象或类并想调用它的属性或方法时，一按点号，编译器就会自动列出它的属性或方法，这里就会用到反射
-三、反射的作用 我们定义一个FatherClass类， 还有一个SonClass类继承于FatherClass类。如下所示。可以看到测试类中变量以及方法的访问权限不是很规范，是为了更明显得查看测试结果而故意设置的，实际项目中不提倡这么写。
-FatherClass.java public class FatherClass { public String mFatherName; public int mFatherAge; public void printFatherMsg(){} } SonClass.java public class SonClass extends FatherClass{ private String mSonName; protected int mSonAge; public String mSonBirthday; public void printSonMsg(){ System.out.println(&amp;#34;Son Msg - name : &amp;#34; + mSonName + &amp;#34;; age : &amp;#34; + mSonAge); } private void setSonName(String name){ mSonName = name; } private void setSonAge(int age){ mSonAge = age; } private int getSonAge(){ return mSonAge; } private String getSonName(){ return mSonName; } } 一、获取类的变量信息 /** * 通过反射获取类的所有变量 */ private static void printFields(){ //1.</description>
     </item>
     
   </channel>

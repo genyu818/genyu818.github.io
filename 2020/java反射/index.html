@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noodp"/>
   <meta name="author" content="WANG,HENGYU">
+  <meta name="description" content="一个记录很多东西的博客。">
   
   
   
   
-  <link rel="next" href="http://genyu818.github.io/2020/ssm-demo1/" />
   <link rel="canonical" href="http://genyu818.github.io/2020/java%E5%8F%8D%E5%B0%84/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           JAVA反射 | LeaveIt
+           Java反射 | WANG, HENGYU
        
   </title>
-  <meta name="title" content="JAVA反射 | LeaveIt">
+  <meta name="title" content="Java反射 | WANG, HENGYU">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,8 +44,8 @@
          "@id": "http:\/\/genyu818.github.io"
     },
     "articleSection" : "posts",
-    "name" : "JAVA反射",
-    "headline" : "JAVA反射",
+    "name" : "Java反射",
+    "headline" : "Java反射",
     "description" : "一、 Java中反射的机制 Java反射机制在程序运行时候，对于任意一个类都能动态的获取到类的属性以及方法。反射机制很重要的就是运行时，其使得我们可以在程序运行对未知的.class进行加载，编译，以及探索。 就是说Java程序在加载一个运行时才得知名称的.class文件，然后获悉其构造过程，属性，以及方法。\n反射的核心是 JVM 在运行时才动态加载类或调用方法\/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。\n二、反射的主要用途 反射最重要的用途就是开发各种通用框架。 很多框架（比如 Spring）都是配置化的（比如通过 XML 文件配置 Bean），为了保证框架的通用性，它们可能需要根据配置文件加载不同的对象或类，调用不同的方法，这个时候就必须用到反射，运行时动态加载需要加载的对象。\n其次，当我们在使用 IDE(如 Eclipse，IDEA)时，当我们输入一个对象或类并想调用它的属性或方法时，一按点号，编译器就会自动列出它的属性或方法，这里就会用到反射\n三、反射的作用 我们定义一个FatherClass类， 还有一个SonClass类继承于FatherClass类。如下所示。可以看到测试类中变量以及方法的访问权限不是很规范，是为了更明显得查看测试结果而故意设置的，实际项目中不提倡这么写。\nFatherClass.java public class FatherClass { public String mFatherName; public int mFatherAge; public void printFatherMsg(){} } SonClass.java public class SonClass extends FatherClass{ private String mSonName; protected int mSonAge; public String mSonBirthday; public void printSonMsg(){ System.out.println(\u0026#34;Son Msg - name : \u0026#34; \u002b mSonName \u002b \u0026#34;; age : \u0026#34; \u002b mSonAge); } private void setSonName(String name){ mSonName = name; } private void setSonAge(int age){ mSonAge = age; } private int getSonAge(){ return mSonAge; } private String getSonName(){ return mSonName; } } 一、获取类的变量信息 \/** * 通过反射获取类的所有变量 *\/ private static void printFields(){ \/\/1.",
     "inLanguage" : "en-us",
     "author" : "WANG,HENGYU",
@@ -58,7 +58,7 @@
     "dateModified" : "2020-07-03 12:58:05 \u002b0800 CST",
     "url" : "http:\/\/genyu818.github.io\/2020\/java%E5%8F%8D%E5%B0%84\/",
     "wordCount" : "319",
-    "keywords" : [  "LeaveIt"]
+    "keywords" : [  "WANG, HENGYU"]
 }
 </script>
 
@@ -72,7 +72,7 @@
         <nav class="navbar">
     <div class="container">
         <div class="navbar-header header-logo">
-        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">LeaveIt</a>
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">WANG, HENGYU</a>
         </div>
         <div class="menu navbar-right">
                 
@@ -91,7 +91,7 @@
 <nav class="navbar-mobile" id="nav-mobile" style="display: none">
      <div class="container">
         <div class="navbar-header">
-            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">LeaveIt</a></div>
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">WANG, HENGYU</a></div>
             <div class="menu-toggle">
                 <span></span><span></span><span></span>
             </div>
@@ -116,7 +116,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">JAVA反射</h1>
+        <h1 class="post-title" itemprop="name headline">Java反射</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="http://genyu818.github.io" rel="author">WANG,HENGYU</a> with ♥ 
                 <span class="post-time">
@@ -334,8 +334,6 @@ System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span>
 
     <div class="post-nav">
          
-        
-        <a href="http://genyu818.github.io/2020/ssm-demo1/" class="next" rel="next" title="SSM DEMO1">SSM DEMO1&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

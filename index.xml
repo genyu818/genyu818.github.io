@@ -1,17 +1,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>LeaveIt on LeaveIt</title>
+    <title>WANG, HENGYU on WANG, HENGYU</title>
     <link>http://genyu818.github.io/</link>
-    <description>Recent content in LeaveIt on LeaveIt</description>
+    <description>Recent content in WANG, HENGYU on WANG, HENGYU</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Jul 2020 13:31:09 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2020 12:58:05 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Categories</title>
       <link>http://genyu818.github.io/categories/</link>
-      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
+      <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
       
       <guid>http://genyu818.github.io/categories/</guid>
       <description></description>
@@ -20,7 +20,7 @@
     <item>
       <title>Posts</title>
       <link>http://genyu818.github.io/posts/</link>
-      <pubDate>Tue, 07 Jul 2020 13:31:09 +0800</pubDate>
+      <pubDate>Fri, 03 Jul 2020 12:58:05 +0800</pubDate>
       
       <guid>http://genyu818.github.io/posts/</guid>
       <description></description>
