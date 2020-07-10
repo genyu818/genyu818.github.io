@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="WANG,HENGYU">
+  <meta name="description" content="一个记录很多东西的博客。">
+  
+  
+  <link rel="prev" href="http://genyu818.github.io/2020/java%E6%B3%9B%E5%9E%8B/" />
+  
+  <link rel="canonical" href="http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           深入浅出Java多线程  基础篇 | WANG, HENGYU
+       
+  </title>
+  <meta name="title" content="深入浅出Java多线程  基础篇 | WANG, HENGYU">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "http:\/\/genyu818.github.io"
+    },
+    "articleSection" : "posts",
+    "name" : "深入浅出Java多线程  基础篇",
+    "headline" : "深入浅出Java多线程  基础篇",
+    "description" : "本文是整理对深入浅出Java多线程该开源书籍的读书笔记。和本书的结构相同总共会有三篇文章，基础篇，原理篇，JDK工具篇。\n进程和线程的一些发展背景，发展曲线不在这次讨论范围，如果有兴趣的胖友可以去自行Google。其次一些过于简单的内容，类如Api的调用，我就没进行记录，大家可以自行查阅，也算是加深自己的印象。\n1 进程和线程的定义 对于进程和线程的定义也好，区别也好，网上最经常说的一句话是进程和线程都是一个时间段的描述，是CPU工作时间段的描述。\n对上面那句话我们来举个例子加深一下印象，假设我可以最大权力的去控制我的电脑，把所有进程都给清除完，并且我还能正常的运行我指定的软件。我在10：00 —11:00，打开了Dota2，这一个小时里，我们就有了一个进程或者线程（先不管进程还是线程）。现在我准备开一把单排上一下分，我开始了匹配，此时又在第一个进程或者线程下开了一个进程或者线程（感觉像在读绕口令）。那我匹配时间特别长，感觉好无聊呀，这时候我想去看下新出的饰品，点开商城。那这个时候是不是又在第一个进程或者线程下又开了一个进程或者线程呢？毫无疑问，是的。\nOK，感觉说的非常拗口，我们来看一个逻辑图。\n这个时候是不是能真正的去去理解了进程和线程都是一个时间段的描述，是CPU工作时间段的描述。\n2 进程和线程的区别 遍寻网络，最后呢我看到了两篇文章讲的还不错，分为学术以及白话。\n2.1 学术篇  进程就是包换上下文切换的程序执行时间总和 = CPU加载上下文\u002bCPU执行\u002bCPU保存上下文 但实际上进程的执行是，进程A得到CPU =》CPU加载上下文，开始执行进程A的a小段，然后执行A的b小段，然后再执行A的c小段，最后CPU保存A的上下文。这个时候a，b，c就称之为线程。  最后就来一个总结：进程和线程都是一个时间段的描述，是CPU工作时间段的描述，不过是颗粒大小不同。\n2.2 白话篇 我们来做个简单的比喻：进程=火车，线程=车厢\n 线程在进程下行进（单纯的车厢无法运行） 一个进程可以包含多个线程（一辆火车可以有多个车厢） 不同进程间数据很难共享（一辆火车上的乘客很难换到另外一辆火车，比如站点换乘） 同一进程下不同线程间数据很易共享（A车厢换到B车厢很容易） 进程要比线程消耗更多的计算机资源（采用多列火车相比多个车厢更耗资源） 进程间不会相互影响，一个线程挂掉将导致整个进程挂掉（一列火车不会影响到另外一列火车，但是如果一列火车上中间的一节车厢着火了，将影响到所有车厢） 进程可以拓展到多机，进程最多适合多核（不同火车可以开在多个轨道上，同一火车的车厢不能在行进的不同的轨道上） 进程使用的内存地址可以上锁，即一个线程使用某些共享内存时，其他线程必须等它结束，才能使用这一块内存。（比如火车上的洗手间）－\u0026ldquo;互斥锁\u0026rdquo; 进程使用的内存地址可以限定使用量（比如火车上的餐厅，最多只允许多少人进入，如果满了需要在门口等，等有人出来了才能进去）－“信号量”  3 多线程入门类和接口 3.1 Thread类和Runnable接口 我们来看一下Java中如何实现多线程的。\n首先，我们需要有一个“线程”类。JDK提供了Thread类和Runnalble接口来让我们实现自己的“线程”类。\n 继承Thread类，并重写run方法； 实现Runnable接口的run方法；  3.1.1 继承Thread类 3.1.2 实现Runnable接口 3.1.3 Thread类的构建方法 Thread类是一个Runnable接口的实现类，我们来看看Thread类的源码。\n查看Thread类的构造方法，发现其实是简单调用一个私有的init方法来实现初始化。init的方法签名：\n\/\/ init方法 private void init(ThreadGroup g, Runnable target, String name, long stackSize, AccessControlContext acc, boolean inheritThreadLocals) \/\/ 构造函数调用init方法 public Thread(Runnable target) { init(null, target, \u0026#34;Thread-\u0026#34; \u002b nextThreadNum(), 0); } \/\/ 使用在init方法里初始化AccessControlContext类型的私有属性 this.",
+    "inLanguage" : "en-us",
+    "author" : "WANG,HENGYU",
+    "creator" : "WANG,HENGYU",
+    "publisher": "WANG,HENGYU",
+    "accountablePerson" : "WANG,HENGYU",
+    "copyrightHolder" : "WANG,HENGYU",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-07-10 08:49:43 \u002b0800 CST",
+    "dateModified" : "2020-07-10 08:49:43 \u002b0800 CST",
+    "url" : "http:\/\/genyu818.github.io\/2020\/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87\/",
+    "wordCount" : "984",
+    "keywords" : [ "Java并发", "WANG, HENGYU"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">WANG, HENGYU</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="http://genyu818.github.io">WANG, HENGYU</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">深入浅出Java多线程  基础篇</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="http://genyu818.github.io" rel="author">WANG,HENGYU</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2020-07-10 itemprop="datePublished">July 10, 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="http://genyu818.github.io/categories/java/"> JAVA </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <p>本文是整理对<a href="http://concurrent.redspider.group/RedSpider.html">深入浅出Java多线程</a>该开源书籍的读书笔记。和本书的结构相同总共会有三篇文章，基础篇，原理篇，JDK工具篇。</p>
+<p>进程和线程的一些发展背景，发展曲线不在这次讨论范围，如果有兴趣的胖友可以去自行Google。其次一些过于简单的内容，类如Api的调用，我就没进行记录，大家可以自行查阅，也算是加深自己的印象。</p>
+<h1 id="1-进程和线程的定义">1 进程和线程的定义</h1>
+<p>对于进程和线程的定义也好，区别也好，网上最经常说的一句话是<strong>进程和线程都是一个时间段的描述，是CPU工作时间段的描述</strong>。</p>
+<p>对上面那句话我们来举个例子加深一下印象，假设我可以最大权力的去控制我的电脑，把所有进程都给清除完，并且我还能正常的运行我指定的软件。我在10：00 —11:00，打开了Dota2，这一个小时里，我们就有了一个<strong>进程或者线程</strong>（先不管进程还是线程）。现在我准备开一把单排上一下分，我开始了匹配，此时又在第一个<strong>进程或者线程下开了一个进程或者线程</strong>（感觉像在读绕口令）。那我匹配时间特别长，感觉好无聊呀，这时候我想去看下新出的饰品，点开商城。那这个时候是不是又在<strong>第一个进程或者线程下又开了一个进程或者线程</strong>呢？毫无疑问，是的。</p>
+<p>OK，感觉说的非常拗口，我们来看一个逻辑图。</p>
+<p><img src="/%E5%B9%B6%E5%8F%911.png" alt="并发1"></p>
+<p>这个时候是不是能真正的去去理解了<strong>进程和线程都是一个时间段的描述，是CPU工作时间段的描述</strong>。</p>
+<h1 id="2-进程和线程的区别">2 进程和线程的区别</h1>
+<p>遍寻网络，最后呢我看到了两篇文章讲的还不错，分为学术以及白话。</p>
+<h2 id="21-学术篇">2.1 学术篇</h2>
+<ul>
+<li><strong>进程就是包换上下文切换的程序执行时间总和</strong> = <strong>CPU加载上下文+CPU执行+CPU保存上下文</strong></li>
+<li>但实际上进程的执行是，进程A得到CPU =》CPU加载上下文，开始执行进程A的a小段，然后执行A的b小段，然后再执行A的c小段，最后CPU保存A的上下文。这个时候a，b，c就称之为线程。</li>
+</ul>
+<p>最后就来一个总结：<strong>进程和线程都是一个时间段的描述，是CPU工作时间段的描述，不过是颗粒大小不同。</strong></p>
+<h2 id="22-白话篇">2.2 白话篇</h2>
+<p>我们来做个简单的比喻：进程=火车，线程=车厢</p>
+<ul>
+<li>线程在进程下行进（单纯的车厢无法运行）</li>
+<li>一个进程可以包含多个线程（一辆火车可以有多个车厢）</li>
+<li>不同进程间数据很难共享（一辆火车上的乘客很难换到另外一辆火车，比如站点换乘）</li>
+<li>同一进程下不同线程间数据很易共享（A车厢换到B车厢很容易）</li>
+<li>进程要比线程消耗更多的计算机资源（采用多列火车相比多个车厢更耗资源）</li>
+<li>进程间不会相互影响，一个线程挂掉将导致整个进程挂掉（一列火车不会影响到另外一列火车，但是如果一列火车上中间的一节车厢着火了，将影响到所有车厢）</li>
+<li>进程可以拓展到多机，进程最多适合多核（不同火车可以开在多个轨道上，同一火车的车厢不能在行进的不同的轨道上）</li>
+<li>进程使用的内存地址可以上锁，即一个线程使用某些共享内存时，其他线程必须等它结束，才能使用这一块内存。（比如火车上的洗手间）－&ldquo;互斥锁&rdquo;</li>
+<li>进程使用的内存地址可以限定使用量（比如火车上的餐厅，最多只允许多少人进入，如果满了需要在门口等，等有人出来了才能进去）－“信号量”</li>
+</ul>
+<h1 id="3-多线程入门类和接口">3 多线程入门类和接口</h1>
+<h2 id="31-thread类和runnable接口">3.1 Thread类和Runnable接口</h2>
+<p>我们来看一下Java中如何实现多线程的。</p>
+<p>首先，我们需要有一个“线程”类。JDK提供了<code>Thread</code>类和<code>Runnalble</code>接口来让我们实现自己的“线程”类。</p>
+<ul>
+<li>继承<code>Thread</code>类，并重写<code>run</code>方法；</li>
+<li>实现<code>Runnable</code>接口的<code>run</code>方法；</li>
+</ul>
+<h2 id="311-继承thread类">3.1.1 继承Thread类</h2>
+<h2 id="312-实现runnable接口">3.1.2 实现Runnable接口</h2>
+<h2 id="313-thread类的构建方法">3.1.3 Thread类的构建方法</h2>
+<p><code>Thread</code>类是一个<code>Runnable</code>接口的实现类，我们来看看<code>Thread</code>类的源码。</p>
+<p>查看<code>Thread</code>类的构造方法，发现其实是简单调用一个私有的<code>init</code>方法来实现初始化。<code>init</code>的方法签名：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// init方法
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">init</span><span style="color:#f92672">(</span>ThreadGroup g<span style="color:#f92672">,</span> Runnable target<span style="color:#f92672">,</span> String name<span style="color:#f92672">,</span>
+                      <span style="color:#66d9ef">long</span> stackSize<span style="color:#f92672">,</span> AccessControlContext acc<span style="color:#f92672">,</span>
+                      <span style="color:#66d9ef">boolean</span> inheritThreadLocals<span style="color:#f92672">)</span>
+
+<span style="color:#75715e">// 构造函数调用init方法
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Thread</span><span style="color:#f92672">(</span>Runnable target<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    init<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">,</span> target<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Thread-&#34;</span> <span style="color:#f92672">+</span> nextThreadNum<span style="color:#f92672">(),</span> 0<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 使用在init方法里初始化AccessControlContext类型的私有属性
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">inheritedAccessControlContext</span> <span style="color:#f92672">=</span> 
+    acc <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">?</span> acc <span style="color:#f92672">:</span> AccessController<span style="color:#f92672">.</span><span style="color:#a6e22e">getContext</span><span style="color:#f92672">();</span>
+
+</code></pre></div><h2 id="314-thread类的几个常用方法">3.1.4 Thread类的几个常用方法</h2>
+<ul>
+<li>currentThread()：静态方法，返回对当前正在执行的线程对象的引用；</li>
+<li>start()：开始执行线程的方法，java虚拟机会调用线程内的run()方法；</li>
+<li>yield()：yield在英语里有放弃的意思，同样，这里的yield()指的是当前线程愿意让出对当前处理器的占用。这里需要注意的是，就算当前线程调用了yield()方法，程序在调度的时候，也还有可能继续运行这个线程的；</li>
+<li>sleep()：静态方法，使当前线程睡眠一段时间；</li>
+<li>join()：使当前线程等待另一个线程执行完毕之后再继续执行，内部调用的是Object类的wait方法实现的；</li>
+</ul>
+<h2 id="315-thread类与runnable接口的比较">3.1.5 Thread类与Runnable接口的比较：</h2>
+<p>由于Java“单继承，多实现”的特性，Runnable接口使用起来比Thread更灵活。所以，我们通常优先使用“实现<code>Runnable</code>接口”这种方式来自定义线程类。</p>
+<h1 id="4-线程组">4 线程组</h1>
+<h2 id="41-线程组">4.1 线程组</h2>
+<h2 id="42-线程的优先级">4.2 线程的优先级</h2>
+<p>这里需要注意，<strong>Java程序中对线程所设置的优先级只是给操作系统一个建议，操作系统不一定会采纳。而真正的调用顺序，是由操作系统的线程调度算法决定的</strong>。</p>
+<h2 id="43-线程组的常用方法">4.3 线程组的常用方法</h2>
+<p>获取当前的线程组名字</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getThreadGroup</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span>
+</code></pre></div><p>复制线程组</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 复制一个线程数组到一个线程组
+</span><span style="color:#75715e"></span>Thread<span style="color:#f92672">[]</span> threads <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">[</span>threadGroup<span style="color:#f92672">.</span><span style="color:#a6e22e">activeCount</span><span style="color:#f92672">()];</span>
+ThreadGroup threadGroup <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ThreadGroup<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;threadGroup&#34;</span><span style="color:#f92672">);</span>
+threadGroup<span style="color:#f92672">.</span><span style="color:#a6e22e">enumerate</span><span style="color:#f92672">(</span>threads<span style="color:#f92672">);</span>
+</code></pre></div><p>线程组统一异常处理</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadGroupDemo</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        ThreadGroup threadGroup1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ThreadGroup<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;group1&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// 继承ThreadGroup并重新定义以下方法
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// 在线程成员抛出unchecked exception
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// 会执行此方法
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">uncaughtException</span><span style="color:#f92672">(</span>Thread t<span style="color:#f92672">,</span> Throwable e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>t<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getMessage</span><span style="color:#f92672">());</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">};</span>
+
+        <span style="color:#75715e">// 这个线程是threadGroup1的一员
+</span><span style="color:#75715e"></span>        Thread thread1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span>threadGroup1<span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> Runnable<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">// 抛出unchecked异常
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RuntimeException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;测试异常&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">});</span>
+
+        thread1<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h2 id="44-线程组的数据结构">4.4 线程组的数据结构</h2>
+<p>线程组还可以包含其他的线程组，不仅仅是线程。</p>
+<p>首先看看 <code>ThreadGroup</code>源码中的成员变量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadGroup</span> <span style="color:#66d9ef">implements</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">UncaughtExceptionHandler</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> ThreadGroup parent<span style="color:#f92672">;</span> <span style="color:#75715e">// 父亲ThreadGroup
+</span><span style="color:#75715e"></span>    String name<span style="color:#f92672">;</span> <span style="color:#75715e">// ThreadGroupr 的名称
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> maxPriority<span style="color:#f92672">;</span> <span style="color:#75715e">// 线程最大优先级
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">boolean</span> destroyed<span style="color:#f92672">;</span> <span style="color:#75715e">// 是否被销毁
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">boolean</span> daemon<span style="color:#f92672">;</span> <span style="color:#75715e">// 是否守护线程
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">boolean</span> vmAllowSuspension<span style="color:#f92672">;</span> <span style="color:#75715e">// 是否可以中断
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">int</span> nUnstartedThreads <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> <span style="color:#75715e">// 还未启动的线程
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> nthreads<span style="color:#f92672">;</span> <span style="color:#75715e">// ThreadGroup中线程数目
+</span><span style="color:#75715e"></span>    Thread threads<span style="color:#f92672">[];</span> <span style="color:#75715e">// ThreadGroup中的线程
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">int</span> ngroups<span style="color:#f92672">;</span> <span style="color:#75715e">// 线程组数目
+</span><span style="color:#75715e"></span>    ThreadGroup groups<span style="color:#f92672">[];</span> <span style="color:#75715e">// 线程组数组
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+</code></pre></div><p>然后看看构造函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 私有构造函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> <span style="color:#a6e22e">ThreadGroup</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span> 
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;system&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxPriority</span> <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">MAX_PRIORITY</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">parent</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 默认是以当前ThreadGroup传入作为parent  ThreadGroup，新线程组的父线程组是目前正在运行线程的线程组。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadGroup</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getThreadGroup</span><span style="color:#f92672">(),</span> name<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 构造函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadGroup</span><span style="color:#f92672">(</span>ThreadGroup parent<span style="color:#f92672">,</span> String name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>checkParentAccess<span style="color:#f92672">(</span>parent<span style="color:#f92672">),</span> parent<span style="color:#f92672">,</span> name<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 私有构造函数，主要的构造函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> <span style="color:#a6e22e">ThreadGroup</span><span style="color:#f92672">(</span>Void unused<span style="color:#f92672">,</span> ThreadGroup parent<span style="color:#f92672">,</span> String name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> name<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxPriority</span> <span style="color:#f92672">=</span> parent<span style="color:#f92672">.</span><span style="color:#a6e22e">maxPriority</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">daemon</span> <span style="color:#f92672">=</span> parent<span style="color:#f92672">.</span><span style="color:#a6e22e">daemon</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">vmAllowSuspension</span> <span style="color:#f92672">=</span> parent<span style="color:#f92672">.</span><span style="color:#a6e22e">vmAllowSuspension</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">parent</span> <span style="color:#f92672">=</span> parent<span style="color:#f92672">;</span>
+    parent<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>第三个构造函数里调用了<code>checkParentAccess</code>方法，这里看看这个方法的源码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 检查parent ThreadGroup
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Void <span style="color:#a6e22e">checkParentAccess</span><span style="color:#f92672">(</span>ThreadGroup parent<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    parent<span style="color:#f92672">.</span><span style="color:#a6e22e">checkAccess</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 判断当前运行的线程是否具有修改线程组的权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">checkAccess</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    SecurityManager security <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">getSecurityManager</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>security <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        security<span style="color:#f92672">.</span><span style="color:#a6e22e">checkAccess</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h1 id="5--线程的状态及主要转化方法">5  线程的状态及主要转化方法</h1>
+<h2 id="51-线程的生命周期">5.1 线程的生命周期</h2>
+<p>我们来看一下，线程中的状态（生命周期）</p>
+<p><img src="/%E5%B9%B6%E5%8F%912.png" alt="并发2"></p>
+<p>操作系统线程主要有以下三个状态：</p>
+<ul>
+<li>就绪状态(ready)：线程正在等待使用CPU，经调度程序调用之后可进入running状态。</li>
+<li>执行状态(running)：线程正在使用CPU。</li>
+<li>等待状态(waiting): 线程经过等待事件的调用或者正在等待其他资源（如I/O）。</li>
+</ul>
+<h2 id="52-java线程的6个状态">5.2 Java线程的6个状态</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// Thread.State 源码
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">enum</span> State <span style="color:#f92672">{</span>
+    NEW<span style="color:#f92672">,</span>
+    RUNNABLE<span style="color:#f92672">,</span>
+    BLOCKED<span style="color:#f92672">,</span>
+    WAITING<span style="color:#f92672">,</span>
+    TIMED_WAITING<span style="color:#f92672">,</span>
+    TERMINATED<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h3 id="521-new">5.2.1 NEW</h3>
+<p>处于New状态的线程是指，已经创建但是还没有调用start() 方法。</p>
+<p><strong>关于start其实还有两个引申问题</strong></p>
+<ol>
+<li>反复调用同一个线程的start()方法是否可行？</li>
+<li>假如一个线程执行完毕（此时处于TERMINATED状态），再次调用这个线程的start()方法是否可行？</li>
+</ol>
+<p>有兴趣可以去自行阅读一下源码，我在这里进行一下总结， 在线程内部Thread 有一个threadStatus的变量，当我们的处于New状态时候，threadStatus为0，当线程到其他状态时候，threadStatus会改变。 在start函数内部有一个判断 如果threadStutas不为0时候，会直接报错。</p>
+<h3 id="522-runnable">5.2.2 RUNNABLE</h3>
+<p>表示当前线程正在运行中。处于RUNNABLE状态的线程在Java虚拟机中运行，也有可能在等待其他系统资源（比如I/O）。</p>
+<p><strong>Java中线程的RUNNABLE状态</strong></p>
+<p>看了操作系统线程的几个状态之后我们来看看Thread源码里对RUNNABLE状态的定义：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/**
+ * Thread state for a runnable thread.  A thread in the runnable
+ * state is executing in the Java virtual machine but it may
+ * be waiting for other resources from the operating system
+ * such as processor.
+ */
+</code></pre></div><p>Java线程的<strong>RUNNABLE</strong>状态其实是包括了传统操作系统线程的<strong>ready</strong>和<strong>running</strong>两个状态的。</p>
+<h3 id="523-blocked">5.2.3 BLOCKED</h3>
+<p>阻塞状态。处于BLOCKED状态的线程正等待锁的释放以进入同步区。</p>
+<h3 id="524-waiting">5.2.4 WAITING</h3>
+<p>等待状态。处于等待状态的线程变成RUNNABLE状态需要其他线程唤醒。</p>
+<p>调用如下3个方法会使线程进入等待状态：</p>
+<ul>
+<li>Object.wait()：使当前线程处于等待状态直到另一个线程唤醒它；</li>
+<li>Thread.join()：等待线程执行完毕，底层调用的是Object实例的wait方法；</li>
+<li>LockSupport.park()：除非获得调用许可，否则禁用当前线程进行线程调度。</li>
+</ul>
+<h3 id="525-timed_waiting">5.2.5 TIMED_WAITING</h3>
+<p>超时等待状态。线程等待一个具体的时间，时间到后会被自动唤醒。</p>
+<p>调用如下方法会使线程进入超时等待状态：</p>
+<ul>
+<li>Thread.sleep(long millis)：使当前线程睡眠指定时间；</li>
+<li>Object.wait(long timeout)：线程休眠指定时间，等待期间可以通过notify()/notifyAll()唤醒；</li>
+<li>Thread.join(long millis)：等待当前线程最多执行millis毫秒，如果millis为0，则会一直执行；</li>
+<li>LockSupport.parkNanos(long nanos)： 除非获得调用许可，否则禁用当前线程进行线程调度指定时间；</li>
+<li>LockSupport.parkUntil(long deadline)：同上，也是禁止线程进行调度指定时间；</li>
+</ul>
+<h3 id="526-terminated">5.2.6 TERMINATED</h3>
+<p>终止状态。此时线程已执行完毕。</p>
+<h2 id="53-线程状态的转换">5.3 线程状态的转换</h2>
+<p>我们来看一下线程之间的状态转换图</p>
+<p><img src="/%E5%B9%B6%E5%8F%913.png" alt=""></p>
+<h4 id="531-blocked与runnable状态的转换">5.3.1 BLOCKED与RUNNABLE状态的转换</h4>
+<h4 id="532-waiting状态与runnable状态的转换">5.3.2 WAITING状态与RUNNABLE状态的转换</h4>
+<p>根据转换图我们知道有3个方法可以使线程从RUNNABLE状态转为WAITING状态。我们主要介绍下<strong>Object.wait()<strong>和</strong>Thread.join()</strong>。</p>
+<p><strong>Object.wait()</strong></p>
+<p>调用wait()方法前线程必须持有对象的锁。</p>
+<p>线程调用wait()方法时，会释放当前的锁，直到有其他线程调用notify()/notifyAll()方法唤醒等待锁的线程。</p>
+<p>需要注意的是，其他线程调用notify()方法只会唤醒单个等待锁的线程，如有有多个线程都在等待这个锁的话不一定会唤醒到之前调用wait()方法的线程。</p>
+<p>同样，调用notifyAll()方法唤醒所有等待锁的线程之后，也不一定会马上把时间片分给刚才放弃锁的那个线程，具体要看系统的调度。</p>
+<p><strong>Thread.join()</strong></p>
+<p>调用join()方法不会释放锁，会一直等待当前线程执行完毕（转换为TERMINATED状态）。</p>
+<h4 id="533timed_waiting与runnable状态转换">5.3.3TIMED_WAITING与RUNNABLE状态转换</h4>
+<p>TIMED_WAITING与WAITING状态类似，只是TIMED_WAITING状态等待的时间是指定的。</p>
+<p><strong>Thread.sleep(long)</strong></p>
+<p>使当前线程睡眠指定时间。需要注意这里的“睡眠”只是暂时使线程停止执行，并不会释放锁。时间到后，线程会重新进入RUNNABLE状态。</p>
+<p><strong>Object.wait(long)</strong></p>
+<p>wait(long)方法使线程进入TIMED_WAITING状态。这里的wait(long)方法与无参方法wait()相同的地方是，都可以通过其他线程调用notify()或notifyAll()方法来唤醒。</p>
+<p>不同的地方是，有参方法wait(long)就算其他线程不来唤醒它，经过指定时间long之后它会自动唤醒，拥有去争夺锁的资格。</p>
+<p><strong>Thread.join(long)</strong></p>
+<p>join(long)使当前线程执行指定时间，并且使线程进入TIMED_WAITING状态。</p>
+<h3 id="54-线程中断">5.4 线程中断</h3>
+<p>在某些情况下，我们在线程启动后发现并不需要它继续执行下去时，需要中断线程。目前在Java里还没有安全直接的方法来停止线程，但是Java提供了线程中断机制来处理需要中断线程的情况。</p>
+<p>线程中断机制是一种协作机制。需要注意，通过中断操作并不能直接终止一个线程，而是通知需要被中断的线程自行处理。</p>
+<p>简单介绍下Thread类里提供的关于线程中断的几个方法：</p>
+<ul>
+<li>Thread.interrupt()：中断线程。这里的中断线程并不会立即停止线程，而是设置线程的中断状态为true（默认是flase）；</li>
+<li>Thread.interrupted()：测试当前线程是否被中断。线程的中断状态受这个方法的影响，意思是调用一次使线程中断状态设置为true，连续调用两次会使得这个线程的中断状态重新转为false；</li>
+<li>Thread.isInterrupted()：测试当前线程是否被中断。与上面方法不同的是调用这个方法并不会影响线程的中断状态。</li>
+</ul>
+<p>在线程中断机制里，当其他线程通知需要被中断的线程后，线程中断的状态被设置为true，但是具体被要求中断的线程要怎么处理，完全由被中断线程自己而定，可以在合适的实际处理中断请求，也可以完全不处理继续执行下去。</p>
+<h1 id="6-线程之间的通信">6 线程之间的通信</h1>
+<h2 id="61-锁和同步">6.1 锁和同步</h2>
+<p>在Java中锁得概念都是基于对象的，我们又称之为对象锁。进程和锁得关系，我们可以用婚姻来表示。一个锁在同一时间内，只能被一个紧张所拥有。也就是说一个锁，如果被一个进程所持有（结婚），那其他线程想到这个锁，就只能等这个进程释放这个锁（离婚）。</p>
+<p>在进程中，有一个同步得概念，什么是同步呢，假如有两位同学在抄笔记，这个时候老师突然想修改一下笔记，这个时候两位同学可能到不一样的笔记，为了让这两个同学抄得笔记一样，我们就需要先让老师修改完笔记，或者笨一点先让两位同学抄好之间的笔记，再让老师进行修改，这就是同步。</p>
+<p>可以以解释为：线程同步是线程之间按照<strong>一定的顺序</strong>执行。</p>
+<p>为了达到线程同步，我们可以使用锁来实现它。</p>
+<p>我们先来看看一个无锁的程序：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NoneLock</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadA</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 100<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Thread A &#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadB</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 100<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Thread B &#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadA<span style="color:#f92672">()).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadB<span style="color:#f92672">()).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>执行这个程序，你会在控制台看到，线程A和线程B各自独立工作，输出自己的打印值。如下是我的电脑上某一次运行的结果。每一次运行结果都会不一样。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">....</span>
+Thread A 48
+Thread A 49
+Thread B 0
+Thread A 50
+Thread B 1
+Thread A 51
+Thread A 52
+<span style="color:#f92672">....</span>
+</code></pre></div><p>那我现在有一个需求，我想等A先执行完之后，再由B去执行，怎么办呢？最简单的方式就是使用一个“对象锁”：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ObjectLock</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Object lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span>
+
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadA</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>lock<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 100<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Thread A &#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadB</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>lock<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 100<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Thread B &#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadA<span style="color:#f92672">()).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>10<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadB<span style="color:#f92672">()).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>这里声明了一个名字为<code>lock</code>的对象锁。我们在<code>ThreadA</code>和<code>ThreadB</code>内需要同步的代码块里，都是用<code>synchronized</code>关键字加上了同一个对象锁<code>lock</code>。</p>
+<p>上文我们说到了，根据线程和锁的关系，同一时间只有一个线程持有一个锁，那么线程B就会等线程A执行完成后释放<code>lock</code>，线程B才能获得锁<code>lock</code>。</p>
+<p><strong>这里在主线程里使用sleep方法睡眠了10毫秒，是为了防止线程B先得到锁。因为如果同时start，线程A和线程B都是出于就绪状态，操作系统可能会先让B运行。这样就会先输出B的内容，然后B执行完成之后自动释放锁，线程A再执行。</strong></p>
+<h2 id="52-等待通知机制">5.2 等待/通知机制</h2>
+<p>基于“锁”的方式，线程需要去不停的去尝试获得锁，如果失败了，还会继续尝试。这就会导致服务器资源上的损耗。</p>
+<p>而等待/通知机制是另一种方式。</p>
+<p>Java多线程的等待/通知机制是基于<code>Object</code>类的<code>wait()</code>方法和<code>notify()</code>, <code>notifyAll()</code>方法来实现的。</p>
+<p><strong>Notes：notify()方法会随机叫醒一个正在等待的线程，而notifyAll()会叫醒所有正在等待的线程。</strong></p>
+<p>我们之前说过一个锁同一时刻只能被一个线程给“占有”。假如现在线程A持有一个锁，我们可以使用lock.wait()的方法，来让线程释放锁，进入等待状态。</p>
+<p>这是另一个线程B开始占有锁，此时我们可以使用lock.notify()来让线程B把锁还给线程A。</p>
+<p><strong>Notes：需要注意的是，这个时候线程B并没有释放锁<code>lock</code>，除非线程B这个时候使用<code>lock.wait()</code>释放锁，或者线程B执行结束自行释放锁，线程A才能得到<code>lock</code>锁。</strong></p>
+<p>我们用代码来实现一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WaitAndNotify</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Object lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Object<span style="color:#f92672">();</span>
+
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadA</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>lock<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 5<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ThreadA: &#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+                        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+                        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">();</span>
+                    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+                lock<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadB</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>lock<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> 5<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ThreadB: &#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+                        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+                        lock<span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">();</span>
+                    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+                lock<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadA<span style="color:#f92672">()).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>1000<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadB<span style="color:#f92672">()).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 输出：
+</span><span style="color:#75715e"></span>ThreadA: 0
+ThreadB: 0
+ThreadA: 1
+ThreadB: 1
+ThreadA: 2
+ThreadB: 2
+ThreadA: 3
+ThreadB: 3
+ThreadA: 4
+ThreadB: 4
+</code></pre></div><p>在这个Demo里，线程A和线程B首先打印出自己需要的东西，然后使用<code>notify()</code>方法叫醒另一个正在等待的线程，然后自己使用<code>wait()</code>方法陷入等待并释放<code>lock</code>锁。</p>
+<p><strong>需要注意的是等待/通知机制使用的是使用同一个对象锁，如果你两个线程使用的是不同的对象锁，那它们之间是不能用等待/通知机制通信的。</strong></p>
+<h2 id="53-管道">5.3 管道</h2>
+<p>管道是基于“管道流”的通信方式。JDK提供了<code>PipedWriter</code>、 <code>PipedReader</code>、 <code>PipedOutputStream</code>、 <code>PipedInputStream</code>。其中，前面两个是基于字符的，后面两个是基于字节流的。</p>
+<h2 id="54其他通信相关">5.4其他通信相关</h2>
+<p>以上介绍了一些线程间通信的基本原理和方法。除此以外，还有一些与线程通信相关的知识点，这里一并介绍。</p>
+<h3 id="541-join方法">5.4.1 join方法</h3>
+<p>join()方法是Thread类的一个实例方法。它的作用是让当前线程陷入“等待”状态，等join的这个线程执行完成后，再继续执行当前线程。</p>
+<h3 id="542-sleep方法">5.4.2 sleep方法</h3>
+<p>sleep方法是Thread类的一个静态方法。它的作用是让当前线程睡眠一段时间。它有这样两个方法：</p>
+<ul>
+<li>Thread.sleep(long)</li>
+<li>Thread.sleep(long, int)</li>
+</ul>
+<p>这里需要强调一下：**sleep方法是不会释放当前的锁的，而wait方法会。**这也是最常见的一个多线程面试题。</p>
+<p>它们还有这些区别：</p>
+<ul>
+<li>wait可以指定时间，也可以不指定；而sleep必须指定时间。</li>
+<li>wait释放cpu资源，同时释放锁；sleep释放cpu资源，但是不释放锁，所以易死锁。</li>
+<li>wait必须放在同步块或同步方法中，而sleep可以再任意位置</li>
+</ul>
+<h3 id="543-threadlocal类">5.4.3 ThreadLocal类</h3>
+<p>ThreadLocal是一个本地线程副本变量工具类。内部是一个<strong>弱引用</strong>的Map来维护。这里不详细介绍它的原理，而是只是介绍它的使用，以后有独立章节来介绍ThreadLocal类的原理。</p>
+<p>有些朋友称ThreadLocal为<strong>线程本地变量</strong>或<strong>线程本地存储</strong>。严格来说，ThreadLocal类并不属于多线程间的通信，而是让每个线程有自己”独立“的变量，线程之间互不影响。它为每个线程都创建一个<strong>副本</strong>，每个线程可以访问自己内部的副本变量。</p>
+<p>ThreadLocal类最常用的就是set方法和get方法。示例代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadLocalDemo</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadA</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">private</span> ThreadLocal<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> threadLocal<span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadA</span><span style="color:#f92672">(</span>ThreadLocal<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> threadLocal<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">threadLocal</span> <span style="color:#f92672">=</span> threadLocal<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            threadLocal<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;A&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>1000<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+            System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ThreadA输出：&#34;</span> <span style="color:#f92672">+</span> threadLocal<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">());</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThreadB</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">private</span> ThreadLocal<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> threadLocal<span style="color:#f92672">;</span>
+
+            <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ThreadB</span><span style="color:#f92672">(</span>ThreadLocal<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> threadLocal<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">threadLocal</span> <span style="color:#f92672">=</span> threadLocal<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+
+            <span style="color:#a6e22e">@Override</span>
+            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+                threadLocal<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;B&#34;</span><span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                    Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>1000<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+                System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ThreadB输出：&#34;</span> <span style="color:#f92672">+</span> threadLocal<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">());</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            ThreadLocal<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> threadLocal <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ThreadLocal<span style="color:#f92672">&lt;&gt;();</span>
+            <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadA<span style="color:#f92672">(</span>threadLocal<span style="color:#f92672">)).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">new</span> Thread<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ThreadB<span style="color:#f92672">(</span>threadLocal<span style="color:#f92672">)).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#75715e">// 输出：
+</span><span style="color:#75715e"></span>ThreadA输出<span style="color:#960050;background-color:#1e0010">：</span>A
+ThreadB输出<span style="color:#960050;background-color:#1e0010">：</span>B
+</code></pre></div><p>可以看到，虽然两个线程使用的同一个ThreadLocal实例（通过构造方法传入），但是它们各自可以存取自己当前线程的一个值。</p>
+<p>那ThreadLocal有什么作用呢？如果只是单纯的想要线程隔离，在每个线程中声明一个私有变量就好了呀，为什么要使用ThreadLocal？</p>
+<p>如果开发者希望将类的某个静态变量（user ID或者transaction ID）与线程状态关联，则可以考虑使用ThreadLocal。</p>
+<p>最常见的ThreadLocal使用场景为用来解决数据库连接、Session管理等。数据库连接和Session管理涉及多个复杂对象的初始化和关闭。如果在每个线程中声明一些私有变量来进行操作，那这个线程就变得不那么“轻量”了，需要频繁的创建和关闭连接。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>WANG,HENGYU </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/>http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/</span>
+            </p>
+            
+             
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="http://genyu818.github.io/tags/java%E5%B9%B6%E5%8F%91/">
+                    #Java并发</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="http://genyu818.github.io">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="http://genyu818.github.io/2020/java%E6%B3%9B%E5%9E%8B/" class="prev" rel="prev" title="Java泛型"><i class="iconfont icon-left"></i>&nbsp;Java泛型</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2020 - 2020</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="http://genyu818.github.io">WANG,HENGYU</a> | </span> 
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

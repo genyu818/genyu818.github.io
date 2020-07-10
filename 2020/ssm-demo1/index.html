@@ -57,7 +57,7 @@
     "datePublished": "2020-07-07 11:41:15 \u002b0800 CST",
     "dateModified" : "2020-07-07 11:41:15 \u002b0800 CST",
     "url" : "http:\/\/genyu818.github.io\/2020\/ssm-demo1\/",
-    "wordCount" : "380",
+    "wordCount" : "820",
     "keywords" : [ "SSM", "WANG, HENGYU"]
 }
 </script>
@@ -320,6 +320,264 @@ jdbc.pwd=wanghengyu123
 <span style="color:#f92672">&lt;/beans&gt;</span>
 </code></pre></div><h5 id="56-congratulation">5.6 Congratulation</h5>
 <p>直到现在你已经完成了SSM框架中的<strong>SM</strong>了（说的好像很猥琐）。大家可以自行去写一些测试类去测试（我实在太懒了！！！！！！！！）</p>
+<h4 id="6-spring整合springmvc">6. Spring整合SpringMVC</h4>
+<h5 id="61-userservice接口">6.1 UserService接口</h5>
+<p>在service包下建立接口文件<code>UserService</code>用来编写我们具体需要要的逻辑代码。 现在我们仅仅只是想完成登录功能， 逻辑无非就是根据用户名查找密码，如果没这个用户名直接返回false，如果有密码但是密码不对也false。如果有密码且密码正确登陆成功。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> why.service<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//import org.apache.ibatis.annotations.Param;
+</span><span style="color:#75715e"></span><span style="color:#f92672">import</span> why.entity.User<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//import java.util.List;
+</span><span style="color:#75715e"></span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">UserService</span> <span style="color:#f92672">{</span>
+    User <span style="color:#a6e22e">checkLogin</span><span style="color:#f92672">(</span>String user_name<span style="color:#f92672">,</span> String user_password<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">findByUsername</span><span style="color:#f92672">(</span>String user_name<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h5 id="62-userserviceimpl类">6.2 UserServiceImpl类</h5>
+<p>我们在Service.impl包中建立 <code>UserServiceImpl</code>  继承于 <code>UserService</code>， 这个类就是具体如何实现我们在 <code>UserService</code>中定义的两个方法了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> why.service.impl<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Autowired<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.stereotype.Service<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.service.UserService<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.dao.UserDao<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.entity.User<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//import javax.annotation.Resource;
+</span><span style="color:#75715e">//import javax.jws.soap.SOAPBinding;
+</span><span style="color:#75715e">//import java.util.List;
+</span><span style="color:#75715e">//import org.springframework.transaction.annotation.Transactional;
+</span><span style="color:#75715e"></span>
+
+<span style="color:#75715e">//@Service(&#34;userService&#34;)
+</span><span style="color:#75715e">//@Transactional
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Service</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserServiceImpl</span> <span style="color:#66d9ef">implements</span> UserService <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Autowired</span>
+    <span style="color:#66d9ef">private</span> UserDao userDao<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">checkLogin</span><span style="color:#f92672">(</span>String user_name<span style="color:#f92672">,</span> String user_password<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        User user <span style="color:#f92672">=</span> userDao<span style="color:#f92672">.</span><span style="color:#a6e22e">findByUsername</span><span style="color:#f92672">(</span>user_name<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>user <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> user<span style="color:#f92672">.</span><span style="color:#a6e22e">getUser_password</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>user_password<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> user<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">findByUsername</span><span style="color:#f92672">(</span>String user_name<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        User user <span style="color:#f92672">=</span> userDao<span style="color:#f92672">.</span><span style="color:#a6e22e">findByUsername</span><span style="color:#f92672">(</span>user_name<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> user<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h5 id="63-springmvc配置">6.3 SpringMvc配置</h5>
+<p>在<code>src</code>下建立spring-mvc.xml进行视图层的配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;beans</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/beans&#34;</span>
+       <span style="color:#a6e22e">xmlns:mvc=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/mvc&#34;</span>
+       <span style="color:#a6e22e">xmlns:contenxt=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/context&#34;</span>
+       <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;
+</span><span style="color:#e6db74">        http://www.springframework.org/schema/beans
+</span><span style="color:#e6db74">        http://www.springframework.org/schema/beans/spring-beans.xsd
+</span><span style="color:#e6db74">        http://www.springframework.org/schema/mvc
+</span><span style="color:#e6db74">        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+</span><span style="color:#e6db74">        http://www.springframework.org/schema/context
+</span><span style="color:#e6db74">        http://www.springframework.org/schema/context/spring-context.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+
+    <span style="color:#75715e">&lt;!-- 扫描Controller所在的包 --&gt;</span>
+    <span style="color:#75715e">&lt;!-- 注解驱动 --&gt;</span>
+    <span style="color:#f92672">&lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;</span>
+    <span style="color:#75715e">&lt;!-- 视图解析器:简化在Controller类编写的视图路径 --&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;org.springframework.web.servlet.view.InternalResourceViewResolver&#34;</span><span style="color:#f92672">&gt;</span>
+        <span style="color:#75715e">&lt;!-- 前缀 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;prefix&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;/WEB-INF/jsp/&#34;</span><span style="color:#f92672">/&gt;</span>
+        <span style="color:#75715e">&lt;!-- 后缀 --&gt;</span>
+        <span style="color:#f92672">&lt;property</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;suffix&#34;</span> <span style="color:#a6e22e">value=</span><span style="color:#e6db74">&#34;.jsp&#34;</span><span style="color:#f92672">/&gt;</span>
+    <span style="color:#f92672">&lt;/bean&gt;</span>
+    <span style="color:#f92672">&lt;contenxt:component-scan</span> <span style="color:#a6e22e">base-package=</span><span style="color:#e6db74">&#34;why.action&#34;</span><span style="color:#f92672">/&gt;</span>
+
+
+<span style="color:#f92672">&lt;/beans&gt;</span>
+</code></pre></div><h5 id="64-web层配置">6.4 web层配置</h5>
+<p>在<code>WEB-INF</code>下建立web.xml去启动整个Spring以及SpringMVC。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;web-app</span> <span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://java.sun.com/xml/ns/javaee&#34;</span> <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&#34;</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;WebApp_ID&#34;</span> <span style="color:#a6e22e">version=</span><span style="color:#e6db74">&#34;2.5&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;display-name&gt;</span>01.mybatis<span style="color:#f92672">&lt;/display-name&gt;</span>
+    <span style="color:#75715e">&lt;!-- 配置SpringMVC编码过滤器 --&gt;</span>
+    <span style="color:#f92672">&lt;filter&gt;</span>
+        <span style="color:#f92672">&lt;filter-name&gt;</span>CharacterEncodingFilter<span style="color:#f92672">&lt;/filter-name&gt;</span>
+        <span style="color:#f92672">&lt;filter-class&gt;</span>org.springframework.web.filter.CharacterEncodingFilter<span style="color:#f92672">&lt;/filter-class&gt;</span>
+        <span style="color:#f92672">&lt;init-param&gt;</span>
+            <span style="color:#f92672">&lt;param-name&gt;</span>encoding<span style="color:#f92672">&lt;/param-name&gt;</span>
+            <span style="color:#f92672">&lt;param-value&gt;</span>utf-8<span style="color:#f92672">&lt;/param-value&gt;</span>
+        <span style="color:#f92672">&lt;/init-param&gt;</span>
+    <span style="color:#f92672">&lt;/filter&gt;</span>
+    <span style="color:#f92672">&lt;filter-mapping&gt;</span>
+        <span style="color:#f92672">&lt;filter-name&gt;</span>CharacterEncodingFilter<span style="color:#f92672">&lt;/filter-name&gt;</span>
+        <span style="color:#f92672">&lt;url-pattern&gt;</span>/*<span style="color:#f92672">&lt;/url-pattern&gt;</span>
+    <span style="color:#f92672">&lt;/filter-mapping&gt;</span>
+    <span style="color:#75715e">&lt;!-- 启动SpringMVC --&gt;</span>
+    <span style="color:#f92672">&lt;servlet&gt;</span>
+        <span style="color:#f92672">&lt;servlet-name&gt;</span>DispatcherServlet<span style="color:#f92672">&lt;/servlet-name&gt;</span>
+        <span style="color:#f92672">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span style="color:#f92672">&lt;/servlet-class&gt;</span>
+        <span style="color:#75715e">&lt;!-- 参数：读取spring-mvc.xml --&gt;</span>
+        <span style="color:#f92672">&lt;init-param&gt;</span>
+            <span style="color:#f92672">&lt;param-name&gt;</span>contextConfigLocation<span style="color:#f92672">&lt;/param-name&gt;</span>
+            <span style="color:#f92672">&lt;param-value&gt;</span>classpath:spring-mvc.xml<span style="color:#f92672">&lt;/param-value&gt;</span>
+        <span style="color:#f92672">&lt;/init-param&gt;</span>
+    <span style="color:#f92672">&lt;/servlet&gt;</span>
+    <span style="color:#f92672">&lt;servlet-mapping&gt;</span>
+        <span style="color:#f92672">&lt;servlet-name&gt;</span>DispatcherServlet<span style="color:#f92672">&lt;/servlet-name&gt;</span>
+        <span style="color:#f92672">&lt;url-pattern&gt;</span>*.action<span style="color:#f92672">&lt;/url-pattern&gt;</span>
+    <span style="color:#f92672">&lt;/servlet-mapping&gt;</span>
+
+    <span style="color:#f92672">&lt;servlet&gt;</span>
+        <span style="color:#f92672">&lt;servlet-name&gt;</span>IdentityServlet<span style="color:#f92672">&lt;/servlet-name&gt;</span>
+        <span style="color:#f92672">&lt;servlet-class&gt;</span>why.utils.IdentityServlet<span style="color:#f92672">&lt;/servlet-class&gt;</span>
+    <span style="color:#f92672">&lt;/servlet&gt;</span>
+    <span style="color:#f92672">&lt;servlet-mapping&gt;</span>
+        <span style="color:#f92672">&lt;servlet-name&gt;</span>IdentityServlet<span style="color:#f92672">&lt;/servlet-name&gt;</span>
+        <span style="color:#f92672">&lt;url-pattern&gt;</span>*.servlet<span style="color:#f92672">&lt;/url-pattern&gt;</span>
+    <span style="color:#f92672">&lt;/servlet-mapping&gt;</span>
+
+    <span style="color:#75715e">&lt;!-- 启动spring --&gt;</span>
+    <span style="color:#f92672">&lt;listener&gt;</span>
+        <span style="color:#f92672">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span style="color:#f92672">&lt;/listener-class&gt;</span>
+    <span style="color:#f92672">&lt;/listener&gt;</span>
+    <span style="color:#75715e">&lt;!-- 修改路径 --&gt;</span>
+    <span style="color:#f92672">&lt;context-param&gt;</span>
+        <span style="color:#f92672">&lt;param-name&gt;</span>contextConfigLocation<span style="color:#f92672">&lt;/param-name&gt;</span>
+        <span style="color:#f92672">&lt;param-value&gt;</span>classpath:applicationContext.xml<span style="color:#f92672">&lt;/param-value&gt;</span>
+    <span style="color:#f92672">&lt;/context-param&gt;</span>
+
+
+<span style="color:#75715e">&lt;!--    &lt;welcome-file-list&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--        &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--        &lt;welcome-file&gt;default.html&lt;/welcome-file&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--        &lt;welcome-file&gt;default.htm&lt;/welcome-file&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--        &lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;--&gt;</span>
+<span style="color:#75715e">&lt;!--    &lt;/welcome-file-list&gt;--&gt;</span>
+<span style="color:#f92672">&lt;/web-app&gt;</span>
+</code></pre></div><h5 id="65-前端页面编写以及controller层">6.5 前端页面编写以及Controller层</h5>
+<p><strong>Notes：我把这两步合为一步，可以让Controller层如何去联合前端（也就是前后端联动）有一个清晰的认识。</strong></p>
+<p>在<code>WEB-INF\jsp</code>下建立<code>login.jsp</code>页面去写前端代码.</p>
+<p>PS: 还应该有 Success.jsp 和 Fail.jsp两个页面，我只是每个页面都返回一句话，即成功、失败。这里就不放代码了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#960050;background-color:#1e0010">&lt;</span>%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2020/7/6
+  Time: 10:00
+  To change this template use File | Settings | File Templates.
+--%&gt;
+<span style="color:#960050;background-color:#1e0010">&lt;</span>%@ page language=&#34;java&#34; contentType=&#34;text/html; charset=utf-8&#34;
+         pageEncoding=&#34;utf-8&#34;%&gt;
+<span style="color:#75715e">&lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD HTML 4.01 Transitional//EN&#34; &#34;http://www.w3.org/TR/html4/loose.dtd&#34;&gt;</span>
+<span style="color:#f92672">&lt;html&gt;</span>
+<span style="color:#f92672">&lt;head&gt;</span>
+    <span style="color:#f92672">&lt;meta</span> <span style="color:#a6e22e">http-equiv=</span><span style="color:#e6db74">&#34;Content-Type&#34;</span> <span style="color:#a6e22e">content=</span><span style="color:#e6db74">&#34;text/html; charset=utf-8&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;title&gt;</span>Insert title here<span style="color:#f92672">&lt;/title&gt;</span>
+<span style="color:#f92672">&lt;/head&gt;</span>
+<span style="color:#f92672">&lt;body&gt;</span>
+
+<span style="color:#f92672">&lt;script&gt;</span>
+<span style="color:#f92672">&lt;/script&gt;</span>
+
+<span style="color:#f92672">&lt;form</span> <span style="color:#a6e22e">action=</span><span style="color:#e6db74">&#34;/SSM/user/checkLogin.action&#34;</span> <span style="color:#a6e22e">method=</span><span style="color:#e6db74">&#34;post&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;table&gt;</span>
+        <span style="color:#f92672">&lt;tr&gt;</span>
+            <span style="color:#f92672">&lt;td&gt;</span>用户名:<span style="color:#f92672">&lt;/td&gt;</span>
+            <span style="color:#f92672">&lt;td&gt;&lt;input</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;user_name&#34;</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;user_name&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;text&#34;</span><span style="color:#f92672">&gt;&lt;/td&gt;</span>
+        <span style="color:#f92672">&lt;/tr&gt;</span>
+        <span style="color:#f92672">&lt;tr&gt;</span>
+            <span style="color:#f92672">&lt;td&gt;</span>密码:<span style="color:#f92672">&lt;/td&gt;</span>
+            <span style="color:#f92672">&lt;td&gt;&lt;input</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;pass_word&#34;</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;user_password&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;text&#34;</span><span style="color:#f92672">&gt;&lt;/td&gt;</span>
+
+        <span style="color:#f92672">&lt;/tr&gt;</span>
+    <span style="color:#f92672">&lt;/table&gt;</span>
+<span style="color:#f92672">&lt;/form&gt;</span>
+
+<span style="color:#f92672">&lt;/body&gt;</span>
+
+<span style="color:#f92672">&lt;/html&gt;</span>
+</code></pre></div><p>然后我们在<code>action</code>包下建立<code>UserController</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">package</span> why.action<span style="color:#f92672">;</span>
+<span style="color:#75715e">//import java.util.List;
+</span><span style="color:#75715e">//import javax.annotation.Resource;
+</span><span style="color:#75715e">//import org.springframework.web.bind.annotation.ResponseBody;
+</span><span style="color:#75715e"></span>
+<span style="color:#f92672">import</span> org.springframework.web.bind.annotation.*<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> javax.servlet.ServletException<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> javax.servlet.ServletOutputStream<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> javax.servlet.http.HttpServletRequest<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> javax.servlet.http.HttpServletResponse<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> javax.servlet.http.HttpSession<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Autowired<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.stereotype.Controller<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> org.springframework.ui.Model<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> why.dao.UserDao<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.service.UserService<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.entity.User<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.utils.IdentityServlet<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> why.utils.RandomValidateCode<span style="color:#f92672">;</span>
+
+<span style="color:#f92672">import</span> java.io.ByteArrayOutputStream<span style="color:#f92672">;</span>
+<span style="color:#f92672">import</span> java.io.IOException<span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@Controller</span>
+<span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/user&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@SessionAttributes</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;user&#34;</span><span style="color:#f92672">)</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserController</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Autowired</span>
+    <span style="color:#66d9ef">private</span> UserService userService<span style="color:#f92672">;</span>
+<span style="color:#75715e">//    private UserDao userDao;
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/login&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">login</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;login&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@RequestMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/checkLogin&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">checkLogin</span><span style="color:#f92672">(</span>User user<span style="color:#f92672">,</span>HttpSession session<span style="color:#f92672">,</span> String code<span style="color:#f92672">,</span> Model model<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//调用service方法
+</span><span style="color:#75715e"></span>        String verifyCode<span style="color:#f92672">=</span> <span style="color:#f92672">(</span>String<span style="color:#f92672">)</span> session<span style="color:#f92672">.</span><span style="color:#a6e22e">getAttribute</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;randomcode_key&#34;</span><span style="color:#f92672">);</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>code<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(!</span>code<span style="color:#f92672">.</span><span style="color:#a6e22e">equalsIgnoreCase</span><span style="color:#f92672">(</span>verifyCode<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;fail&#34;</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            user <span style="color:#f92672">=</span> userService<span style="color:#f92672">.</span><span style="color:#a6e22e">checkLogin</span><span style="color:#f92672">(</span>user<span style="color:#f92672">.</span><span style="color:#a6e22e">getUser_name</span><span style="color:#f92672">(),</span> user<span style="color:#f92672">.</span><span style="color:#a6e22e">getUser_password</span><span style="color:#f92672">());</span>
+            <span style="color:#75715e">//若有user则添加到model里并且跳转到成功页面
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>user <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                model<span style="color:#f92672">.</span><span style="color:#a6e22e">addAttribute</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;user&#34;</span><span style="color:#f92672">,</span> user<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;success&#34;</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;fail&#34;</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>当当当！！！现在我们项目已经完成，我们启动Tomcat，访问http://localhost:8080/SSM/user/login.action  （SSM是你自己再Tomcat定义的关键字），我们可以看到已经成功了。经过可以实现登录功能。</p>
+<p><img src="/SSM-DEMO1.4.png" alt="SSM-DEMO1.4"></p>
+<p>现在呢，我来梳理一下Controller层是如何进行前后端联动的</p>
+<p><img src="/SSM-DEMO1.5.png" alt="SSM-DEMO1.5"></p>
+<h4 id="7-完结撒花">7. 完结撒花</h4>
+<p>那当然是不可能的了。再简单的项目也不然只能是只有登录的功能把，如果我们想在增加注册，修改等功能应该怎么做呢。我再来带大家梳理一下。</p>
+<ol>
+<li>增加UserDao中的方法，声明你想要的功能，毕竟我们现在只有一个查询的功能。</li>
+<li>增加UserMapper.xml中的方法，去对数据库进行操作。记得一定要和UserDao中的方法所对应。</li>
+<li>增加UserService中方法，声明你准备用在页面上的功能。</li>
+<li>增加UserServiceImpl中的方法，具体实现在UserService定义的方法。</li>
+<li>建立前端页面，绑定事件。</li>
+<li>在UserController中与前端进行联动。</li>
+</ol>
+<p>大家可以自己尝试去增加注册修改等功能，毕竟授之于鱼不如授之于渔，当然大家做不出来可以参考我GitHub中的源码，我已经都完善了。不过呢对SSM框架，现在仅仅仅仅也就是入个门。革命还没成功，同志们还需努力呀。</p>
 
     </div>
 

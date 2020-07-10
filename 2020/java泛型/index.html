@@ -10,7 +10,7 @@
   
   
   <link rel="prev" href="http://genyu818.github.io/2020/%E4%BA%94%E5%B1%82%E5%8D%8F%E8%AE%AE/" />
-  
+  <link rel="next" href="http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/" />
   <link rel="canonical" href="http://genyu818.github.io/2020/java%E6%B3%9B%E5%9E%8B/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -57,7 +57,7 @@
     "datePublished": "2020-07-08 15:11:08 \u002b0800 CST",
     "dateModified" : "2020-07-08 15:11:08 \u002b0800 CST",
     "url" : "http:\/\/genyu818.github.io\/2020\/java%E6%B3%9B%E5%9E%8B\/",
-    "wordCount" : "306",
+    "wordCount" : "479",
     "keywords" : [  "WANG, HENGYU"]
 }
 </script>
@@ -276,6 +276,73 @@ AAAAA
     <span style="color:#f92672">....</span>
 <span style="color:#f92672">}</span>
 </code></pre></div><h1 id="3泛型擦除">3.泛型擦除</h1>
+<h2 id="31泛型擦除的原理">3.1泛型擦除的原理</h2>
+<p>使用泛型定义参数化的类时，Java 编译器不会实际创建一个新类型。编译器会接受您指定的类型，将它擦除并替换回以下两种类型之一：上限（如果您已指定）或 Object （如果没指定）。考虑这个示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ObjectContainer</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span> 
+	<span style="color:#66d9ef">private</span> T contained<span style="color:#f92672">;</span> 
+	<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ObjectContainer</span><span style="color:#f92672">(</span>T contained<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> 
+  		<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">contained</span> <span style="color:#f92672">=</span> contained<span style="color:#f92672">;</span> 
+<span style="color:#f92672">}</span> 
+<span style="color:#66d9ef">public</span> T <span style="color:#a6e22e">getContained</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span> 
+	<span style="color:#66d9ef">return</span> contained<span style="color:#f92672">;</span> 
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>在这个示例中，声明参数化类型 ObjectContainer 时未指定上限，所以编译器生成以下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ObjectContainer</span> <span style="color:#f92672">{</span>
+	<span style="color:#66d9ef">private</span> Object contained<span style="color:#f92672">;</span> 
+	<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ObjectContainer</span><span style="color:#f92672">(</span>Object contained<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> 
+  		<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">contained</span> <span style="color:#f92672">=</span> contained<span style="color:#f92672">;</span> 
+	<span style="color:#f92672">}</span> 
+	<span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">getContained</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span> 
+  		<span style="color:#66d9ef">return</span> contained<span style="color:#f92672">;</span>
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>因为没有上限，参数的类型 ( T ) 被擦除并替换回 Object 。在声明 ObjectContainer 时，编译器插入了一个强制转换，所以代码类似于：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">ObjectContainer<span style="color:#f92672">&lt;</span>Person<span style="color:#f92672">&gt;</span> personContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ObjectContainer<span style="color:#f92672">&lt;&gt;(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Steve&#34;</span><span style="color:#f92672">,</span> 49<span style="color:#f92672">));</span>
+               Person contained <span style="color:#f92672">=</span> personContainer<span style="color:#f92672">.</span><span style="color:#a6e22e">getContained</span><span style="color:#f92672">();</span>
+
+System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ObjectContainer&lt;Person&gt; contains: &#34;</span> <span style="color:#f92672">+</span>contained<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+</code></pre></div><p>但是，编译器生成以下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">ObjectContainer personContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ObjectContainer<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Steve&#34;</span><span style="color:#f92672">,</span>49<span style="color:#f92672">));</span>
+        Person contained <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Person<span style="color:#f92672">)</span>personContainer<span style="color:#f92672">.</span><span style="color:#a6e22e">getContained</span><span style="color:#f92672">();</span>
+System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ObjectContainer&lt;Person&gt; contains: &#34;</span> <span style="color:#f92672">+</span>contained<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+</code></pre></div><p>请注意上面代码中转换为 Person 的强制转换。这是因为，编译器在幕后将声明的类型 ( Person ) 擦除并替换回 Object ，必须插入强制转换，代码才能正确运行。使用限定类型时，就会出现类似情况，除非使用指定的上限，而不是使用 Object 作为上限。</p>
+<h2 id="32-泛型擦除的缺陷">3.2 泛型擦除的缺陷</h2>
+<p>泛型类型不能显示的运用在类运行时类型的操作当中。例如：new，instance，因为在运行时候，由于泛型擦除，泛型信息已经被擦除掉了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Erased</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>    
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> SIZE <span style="color:#f92672">=</span> 100<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">f</span><span style="color:#f92672">(</span>Object arg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//编译不通过        
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>arg <span style="color:#66d9ef">instanceof</span> T<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>      
+        <span style="color:#f92672">}</span>       
+        <span style="color:#75715e">//编译不通过       
+</span><span style="color:#75715e"></span>        T var <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> T<span style="color:#f92672">();</span>        
+        <span style="color:#75715e">//编译不通过        
+</span><span style="color:#75715e"></span>        T<span style="color:#f92672">[]</span> array <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> T<span style="color:#f92672">[</span>SIZE<span style="color:#f92672">];</span> 
+        <span style="color:#75715e">//编译不通过     
+</span><span style="color:#75715e"></span>        T<span style="color:#f92672">[]</span> array <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span> <span style="color:#66d9ef">new</span> Object<span style="color:#f92672">[</span>SIZE<span style="color:#f92672">];</span> 
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h2 id="33-泛型中的通配符">3.3 泛型中的通配符</h2>
+<ul>
+<li>
+<p>上界通配符 &lt;? extends T&gt;</p>
+</li>
+<li>
+<p>下界通配符 &lt;? super T&gt;</p>
+</li>
+<li>
+<p>PECS原则</p>
+<p>最后简单介绍下Effective Java这本书里面介绍的PECS原则。</p>
+<ul>
+<li>上界&lt;? extends T&gt;不能往里存，只能往外取，适合频繁往外面读取内容的场景。</li>
+<li>下界&lt;? super T&gt;不影响往里存，但往外取只能放在Object对象里，适合经常往里面插入数据的场景。</li>
+</ul>
+<ul>
+<li>下界&lt;? super T&gt;不影响往里存，但往外取只能放在Object对象里，适合经常往里面插入数据的场景。</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -313,6 +380,8 @@ AAAAA
         
         <a href="http://genyu818.github.io/2020/%E4%BA%94%E5%B1%82%E5%8D%8F%E8%AE%AE/" class="prev" rel="prev" title="五层协议"><i class="iconfont icon-left"></i>&nbsp;五层协议</a>
          
+        
+        <a href="http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="next" rel="next" title="深入浅出Java多线程  基础篇">深入浅出Java多线程  基础篇&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

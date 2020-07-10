@@ -6,10 +6,32 @@
     <description>Recent content in Posts on WANG, HENGYU</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Jul 2020 15:11:08 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2020 08:49:43 +0800</lastBuildDate>
     
 	<atom:link href="http://genyu818.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>深入浅出Java多线程  基础篇</title>
+      <link>http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/</link>
+      <pubDate>Fri, 10 Jul 2020 08:49:43 +0800</pubDate>
+      
+      <guid>http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%9F%BA%E7%A1%80%E7%AF%87/</guid>
+      <description>本文是整理对深入浅出Java多线程该开源书籍的读书笔记。和本书的结构相同总共会有三篇文章，基础篇，原理篇，JDK工具篇。
+进程和线程的一些发展背景，发展曲线不在这次讨论范围，如果有兴趣的胖友可以去自行Google。其次一些过于简单的内容，类如Api的调用，我就没进行记录，大家可以自行查阅，也算是加深自己的印象。
+1 进程和线程的定义 对于进程和线程的定义也好，区别也好，网上最经常说的一句话是进程和线程都是一个时间段的描述，是CPU工作时间段的描述。
+对上面那句话我们来举个例子加深一下印象，假设我可以最大权力的去控制我的电脑，把所有进程都给清除完，并且我还能正常的运行我指定的软件。我在10：00 —11:00，打开了Dota2，这一个小时里，我们就有了一个进程或者线程（先不管进程还是线程）。现在我准备开一把单排上一下分，我开始了匹配，此时又在第一个进程或者线程下开了一个进程或者线程（感觉像在读绕口令）。那我匹配时间特别长，感觉好无聊呀，这时候我想去看下新出的饰品，点开商城。那这个时候是不是又在第一个进程或者线程下又开了一个进程或者线程呢？毫无疑问，是的。
+OK，感觉说的非常拗口，我们来看一个逻辑图。
+这个时候是不是能真正的去去理解了进程和线程都是一个时间段的描述，是CPU工作时间段的描述。
+2 进程和线程的区别 遍寻网络，最后呢我看到了两篇文章讲的还不错，分为学术以及白话。
+2.1 学术篇  进程就是包换上下文切换的程序执行时间总和 = CPU加载上下文+CPU执行+CPU保存上下文 但实际上进程的执行是，进程A得到CPU =》CPU加载上下文，开始执行进程A的a小段，然后执行A的b小段，然后再执行A的c小段，最后CPU保存A的上下文。这个时候a，b，c就称之为线程。  最后就来一个总结：进程和线程都是一个时间段的描述，是CPU工作时间段的描述，不过是颗粒大小不同。
+2.2 白话篇 我们来做个简单的比喻：进程=火车，线程=车厢
+ 线程在进程下行进（单纯的车厢无法运行） 一个进程可以包含多个线程（一辆火车可以有多个车厢） 不同进程间数据很难共享（一辆火车上的乘客很难换到另外一辆火车，比如站点换乘） 同一进程下不同线程间数据很易共享（A车厢换到B车厢很容易） 进程要比线程消耗更多的计算机资源（采用多列火车相比多个车厢更耗资源） 进程间不会相互影响，一个线程挂掉将导致整个进程挂掉（一列火车不会影响到另外一列火车，但是如果一列火车上中间的一节车厢着火了，将影响到所有车厢） 进程可以拓展到多机，进程最多适合多核（不同火车可以开在多个轨道上，同一火车的车厢不能在行进的不同的轨道上） 进程使用的内存地址可以上锁，即一个线程使用某些共享内存时，其他线程必须等它结束，才能使用这一块内存。（比如火车上的洗手间）－&amp;ldquo;互斥锁&amp;rdquo; 进程使用的内存地址可以限定使用量（比如火车上的餐厅，最多只允许多少人进入，如果满了需要在门口等，等有人出来了才能进去）－“信号量”  3 多线程入门类和接口 3.1 Thread类和Runnable接口 我们来看一下Java中如何实现多线程的。
+首先，我们需要有一个“线程”类。JDK提供了Thread类和Runnalble接口来让我们实现自己的“线程”类。
+ 继承Thread类，并重写run方法； 实现Runnable接口的run方法；  3.1.1 继承Thread类 3.1.2 实现Runnable接口 3.1.3 Thread类的构建方法 Thread类是一个Runnable接口的实现类，我们来看看Thread类的源码。
+查看Thread类的构造方法，发现其实是简单调用一个私有的init方法来实现初始化。init的方法签名：
+// init方法 private void init(ThreadGroup g, Runnable target, String name, long stackSize, AccessControlContext acc, boolean inheritThreadLocals) // 构造函数调用init方法 public Thread(Runnable target) { init(null, target, &amp;#34;Thread-&amp;#34; + nextThreadNum(), 0); } // 使用在init方法里初始化AccessControlContext类型的私有属性 this.</description>
+    </item>
     
     <item>
       <title>Java泛型</title>
