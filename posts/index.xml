@@ -6,10 +6,54 @@
     <description>Recent content in Posts on WANG, HENGYU</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jul 2020 08:49:43 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2020 13:16:35 +0800</lastBuildDate>
     
 	<atom:link href="http://genyu818.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>深入浅出Java多线程  原理篇</title>
+      <link>http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%8E%9F%E7%90%86%E7%AF%87/</link>
+      <pubDate>Mon, 13 Jul 2020 13:16:35 +0800</pubDate>
+      
+      <guid>http://genyu818.github.io/2020/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAjava%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%8E%9F%E7%90%86%E7%AF%87/</guid>
+      <description>1. Java内存模型基础知识 1.1 并发编程模型的两个关键问题  线程间如何通信，线程如何传递数据 线程间如何同步，不同的线程如何决定线程操作的顺序  一般有两种模型来解决这种问题
+ 消息传递并发模型，线程之间之间没有公共状态，通信是显式，同步在通信之中是隐式。 共享内存并发模型，线程之间有公共状态，同步需要设定线程之间的互斥状态是显式，传递数据在公共内存是隐士。  在Java中，使用的是共享内存并发模型。
+1.2 Java内存模型的抽象结构 1.2.1 运行时的内存划分 我们可以看到对于每一个线程来说，栈是私有的，堆是共有的。也就是说栈中的变量（局部变量，方法定义参数，异常处理参数）不会在内存中共享，也就不会有内存可见性的问题。而在堆中的变量是共享的，即共享变量。
+所以内存可见性是针对共享变量即堆中的变量。
+1.2.2 内存共享 即使堆中变量是共享的，为什么堆中的内存往往不可见呢？这是因为现在计算机为了速度，设置了一个高速缓存区中缓存共享变量，cpu往往访问高速缓存区会比访问内存速度要快。
+Java线程之间的通信是由Java内存模型控制（JMM），从抽象角度来看JMM定义了线程和内存之间的抽象关系，JMM抽象示意图如下所示
+我们可以看到
+ 所有的共享变量在主内存中 每个线程中保留着共享变量的副本（我理解为 共享变量的副本就是该线程要同步到主内存中的内容） 如果线程A想与线程B进行通信的话  线程A将本地内存A中更新的共享变量刷新到主内存中 线程B到主内存中去读取线程A的共享副本更新过去的共享变量    所以线程B无法直接去读取线程A中的内容，而是通过主内存进行操作。
+**注意JMM中规定线程之间的通信必须要在本地内存中进行，不能在线程的主内存中进行。**这就是说线程B不是直接去读取主内存中的共享内容，而是本地内存A将共享副本更新到共享内存之后，共享内存会同步更新内容到本地内存B，此时线程B去本地内存B去查找并发现共享副本发生变换，然后线程B才会读取共享内存B中的内容。
+那么怎么知道这个共享变量的被其他线程更新了呢？这就是JMM的功劳了，也是JMM存在的必要性之一。JMM通过控制主内存与每个线程的本地内存之间的交互，来提供内存可见性保证。
+1.2.3 JMM和Java内存区划分的区别和联系 实际上，他们表达的是同一种含义，这里不做区分。
+2. 重排序和happens-before 2.1 什么是重排序 计算机在执行程序时候，会利用重排序来提升性能。
+怎么来理解指令重排序能提高性能呢？
+简单地说，每一个指令都会包含多个步骤，每个步骤可能使用不同的硬件。因此，流水线技术产生了，它的原理是指令1还没有执行完，就可以开始执行指令2，而不用等到指令1执行结束之后再执行指令2，这样就大大提高了效率。
+但是，流水线技术最害怕中断，恢复中断的代价是比较大的，所以我们要想尽办法不让流水线中断。指令重排就是减少中断的一种技术。
+我们分析一下下面这个代码的执行情况：
+a = b + c; d = e - f ; 先加载b，c，然后再执行add（b，c），这个过程中我们必须要等待b，c装载结束才能执行add（）。同理后面相似的操作都会增加等待过程即停顿，这样就会一直降低计算机的执行效率。
+为了减少停顿，我们可以先加载e，f在执行add（），这样对程序没有影响却减少了停顿。
+指令重排对提升cpu性能有着至关重要的作用，虽然可能会带来乱序的问题，但是我们完全可以接受。
+指令重排一般分为以下三种：
+  编译器优化重排
+编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。</description>
+    </item>
+    
+    <item>
+      <title>Java中==和equals的区别</title>
+      <link>http://genyu818.github.io/2020/java%E4%B8%AD%E5%92%8Cequals%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Mon, 13 Jul 2020 09:17:30 +0800</pubDate>
+      
+      <guid>http://genyu818.github.io/2020/java%E4%B8%AD%E5%92%8Cequals%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>最近再写一个逻辑的时候遇到一个小问题，用“==”判断失败，最后改成“equals()”成功，这次对这两个东西给弄清楚
+1. ==  对于基本类型byte,short,char,int,long,float,double,boolean，==比较的是它们之间的值 对于引用类型String，Integer等，==比较的是它们内存存放的地址（确切的说是堆内存）  Notes:Java中每new一个对象都会开辟一个新的堆内存。
+2.equals() 首先我们要先知道，Java中所有的类都继承于Object这个超类，equals()方法就定义在Object这个超类中，我们来看一下equals（）的源码。
+public boolean equals(Object obj){ return this==obj; } 我们可以看到其实equals()就是==，比较的就是对象的存放地址。这好像和我们之前学的不太一样，别急，我们来看下面一段话。
+再一些类中，equals()方法被重写了，如Integer，String等，我们来打开String中equals()的源码来看一下。
+public boolean equals(Object anObject) { 2 if (this == anObject) { 3 return true; 4 } 5 if (anObject instanceof String) { 6 String anotherString = (String)anObject; 7 int n = value.length; 8 if (n == anotherString.value.length) { 9 char v1[] = value; 10 char v2[] = anotherString.value; 11 int i = 0; 12 while (n-- !</description>
+    </item>
     
     <item>
       <title>深入浅出Java多线程  基础篇</title>
