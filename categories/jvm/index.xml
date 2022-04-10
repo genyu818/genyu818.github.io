@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JVM on Hengyu&#39;s Blog</title>
+    <link>http://localhost:1313/categories/jvm/</link>
+    <description>Recent content in JVM on Hengyu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 08 Apr 2022 23:20:15 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/jvm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JVM-10  诊断及监控工具</title>
+      <link>http://localhost:1313/post/jvm10-%E8%AF%8A%E6%96%AD%E5%8F%8A%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Fri, 08 Apr 2022 23:20:15 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm10-%E8%AF%8A%E6%96%AD%E5%8F%8A%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7/</guid>
+      <description>JVM监控以及诊断工具 1. 命令行 1.1 jps: 查看正在运行的Java进程 jps(Java Process Status)：显示指定系统内所有的HotSpot虚拟机进程（查看虚拟机进程</description>
+    </item>
+    
+    <item>
+      <title>JVM-9  JVM参数</title>
+      <link>http://localhost:1313/post/jvm09-jvm%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Fri, 08 Apr 2022 23:19:50 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm09-jvm%E5%8F%82%E6%95%B0/</guid>
+      <description>JVM运行时参数 1. JVM参数选项 1.1 类型一：标准参数选项 java -help 用法: java [-options] class [args...] (执行类) 或 java [-options] -jar jarfile [args...] (执行 jar 文件) 其中选项包括: -d32 使用 32 位数据模型</description>
+    </item>
+    
+    <item>
+      <title>JVM-8  垃圾回收器</title>
+      <link>http://localhost:1313/post/jvm08-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/</link>
+      <pubDate>Fri, 08 Apr 2022 23:17:20 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm08-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/</guid>
+      <description>垃圾回收器 1. 垃圾回收分类 1.1 按线程数分 1.1.1 串行回收器 1.1.2 并行回收器 1.2 按工作模式分 1.2.1 独占式 1.2.2 并发式 2. GC性能指标 2.1 吞吐量 吞吐量就是CPU用于运行用户</description>
+    </item>
+    
+    <item>
+      <title>JVM-7  垃圾回收相关概念</title>
+      <link>http://localhost:1313/post/jvm07-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/</link>
+      <pubDate>Fri, 08 Apr 2022 23:16:25 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm07-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/</guid>
+      <description>垃圾回收相关概念 1. OOM 内存溢出相对于内存泄漏来说，尽管更容易被理解，但是同样的，内存溢出也是引发程序崩溃的罪魁祸首之一。 由于GC一直在发展，所</description>
+    </item>
+    
+    <item>
+      <title>JVM-6  垃圾回收算法</title>
+      <link>http://localhost:1313/post/jvm06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Fri, 08 Apr 2022 23:11:52 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/</guid>
+      <description>垃圾回收概述及算法 垃圾回收，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。 关于垃圾</description>
+    </item>
+    
+    <item>
+      <title>JVM-5 执行引擎</title>
+      <link>http://localhost:1313/post/jvm05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/</link>
+      <pubDate>Fri, 08 Apr 2022 23:08:55 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/</guid>
+      <description>执行引擎 1、执行引擎概述 执行引擎是Java虚拟机的核心组成部分之一。 虚拟机是一个相对于“物理机”的概念，这两种机器都有代码执行能力，其区别是</description>
+    </item>
+    
+    <item>
+      <title>JVM-4  方法区</title>
+      <link>http://localhost:1313/post/jvm04-%E6%96%B9%E6%B3%95%E5%8C%BA/</link>
+      <pubDate>Fri, 08 Apr 2022 23:05:40 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm04-%E6%96%B9%E6%B3%95%E5%8C%BA/</guid>
+      <description>方法区 1. 栈，堆，方法区的交互关系 2. 方法区的理解 《Java虚拟机规范》中明确说明：‘尽管所有的方法区在逻辑上属于堆的一部分，但一些简单的实现可</description>
+    </item>
+    
+    <item>
+      <title>JVM-3  堆</title>
+      <link>http://localhost:1313/post/jvm03-%E5%A0%86/</link>
+      <pubDate>Fri, 08 Apr 2022 21:24:04 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm03-%E5%A0%86/</guid>
+      <description>堆 1. 堆的核心概述 一个进程对应一个jvm实例，同时包含多个线程，这些==线程共享方法区和堆==，每个==线程独有程序计数器、本地方法栈和虚拟机</description>
+    </item>
+    
+    <item>
+      <title>JVM-2  程序计数器和操作数栈</title>
+      <link>http://localhost:1313/post/jvm02-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8%E5%92%8C%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88/</link>
+      <pubDate>Fri, 08 Apr 2022 21:13:12 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm02-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8%E5%92%8C%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88/</guid>
+      <description>运行时数据区 1. 程序计数器 程序计数器是一块较小的内存空间，它可以看作是当前线程所执行的字节码行号指示器。字节码解释器工作就是通过改变这个计数器</description>
+    </item>
+    
+    <item>
+      <title>JVM-1 类加载子系统</title>
+      <link>http://localhost:1313/post/jvm01-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Fri, 08 Apr 2022 21:04:57 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/jvm01-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/</guid>
+      <description>类加载子系统 一个类从被加载到虚拟内存开始，到卸除内存为止，它的整个生命周期会经历加载，验证，准备，解析，初始化，使用和卸载七个阶段。其中验证</description>
+    </item>
+    
+  </channel>
+</rss>

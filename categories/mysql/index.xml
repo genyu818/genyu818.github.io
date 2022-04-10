@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySql on Hengyu&#39;s Blog</title>
+    <link>http://localhost:1313/categories/mysql/</link>
+    <description>Recent content in MySql on Hengyu&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 10 Apr 2022 19:12:32 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySql-4 架构</title>
+      <link>http://localhost:1313/post/mysql4-%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Sun, 10 Apr 2022 19:12:32 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/mysql4-%E6%9E%B6%E6%9E%84/</guid>
+      <description>MYSQL的基础架构 1. MYSQL架构 Mysql可分为Server层和存储引擎两部分。 1.1 Server层 Server层包括连接器、查询缓存、分析</description>
+    </item>
+    
+    <item>
+      <title>MySql-3 事务</title>
+      <link>http://localhost:1313/post/mysql3-%E4%BA%8B%E5%8A%A1/</link>
+      <pubDate>Sun, 10 Apr 2022 19:12:20 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/mysql3-%E4%BA%8B%E5%8A%A1/</guid>
+      <description>事务隔离 1. 隔离性与隔离级别 读未提交：一个事务还没提交，它的变更可被看到 读提交：一个事务提交后，变更才可被看到 可重复读：一个事务中读取到的值，</description>
+    </item>
+    
+    <item>
+      <title>MySql-2 锁</title>
+      <link>http://localhost:1313/post/mysql2-%E9%94%81/</link>
+      <pubDate>Sun, 10 Apr 2022 19:12:02 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/mysql2-%E9%94%81/</guid>
+      <description>锁 1. 全局锁 整个数据加锁变为只读状态，任何更新数据语句，更新表字段，建表语句都会被阻塞。 全局锁的典型使用场景是，做全库逻辑备份。也就是把整库每</description>
+    </item>
+    
+    <item>
+      <title>MySql-1 索引</title>
+      <link>http://localhost:1313/post/mysql1-%E7%B4%A2%E5%BC%95/</link>
+      <pubDate>Sun, 10 Apr 2022 19:11:50 +0800</pubDate>
+      
+      <guid>http://localhost:1313/post/mysql1-%E7%B4%A2%E5%BC%95/</guid>
+      <description>索引 1. 索引的常见模型 哈希表 数组+链表(拉链法解决冲突)，缺点是不好范围查询，适合等式查询 有序数组 查询效率很高，但是更改效率非常差，适合静态表</description>
+    </item>
+    
+  </channel>
+</rss>

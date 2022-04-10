@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JVM-6  垃圾回收算法 - Hengyu&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Hengyu" /><meta name="description" content="垃圾回收概述及算法 垃圾回收，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。 关于垃圾" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/jvm06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="JVM-6  垃圾回收算法" />
+<meta property="og:description" content="垃圾回收概述及算法 垃圾回收，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。 关于垃圾" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/jvm06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-04-08T23:11:52&#43;08:00" />
+<meta property="article:modified_time" content="2022-04-08T23:11:52&#43;08:00" />
+
+<meta itemprop="name" content="JVM-6  垃圾回收算法">
+<meta itemprop="description" content="垃圾回收概述及算法 垃圾回收，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。 关于垃圾"><meta itemprop="datePublished" content="2022-04-08T23:11:52&#43;08:00" />
+<meta itemprop="dateModified" content="2022-04-08T23:11:52&#43;08:00" />
+<meta itemprop="wordCount" content="5306">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JVM-6  垃圾回收算法"/>
+<meta name="twitter:description" content="垃圾回收概述及算法 垃圾回收，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。 关于垃圾"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Hengyu</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Hengyu</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JVM-6  垃圾回收算法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-04-08 </span>
+        <div class="post-category">
+            <a href="/categories/jvm/"> JVM </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#垃圾回收概述及算法">垃圾回收概述及算法</a>
+      <ul>
+        <li><a href="#1垃圾回收概述">1.	垃圾回收概述</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+        <li><a href="#2垃圾回收算法">2.	垃圾回收算法</a>
+          <ul>
+            <li><a href="#21标记阶段判断哪些对象需要被回收">2.1	标记阶段（判断哪些对象需要被回收）</a></li>
+            <li><a href="#22清除阶段">2.2	清除阶段</a></li>
+            <li><a href="#heading"></a></li>
+          </ul>
+        </li>
+        <li><a href="#3分代收集算法">3.	分代收集算法</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+        <li><a href="#4分区收集算法g1垃圾回收器会细讲">4.	分区收集算法（G1垃圾回收器会细讲）</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="垃圾回收概述及算法">垃圾回收概述及算法</h1>
+<p>垃圾回收，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。</p>
+<p>关于垃圾收集有三个经典问题：</p>
+<ul>
+<li>
+<p>哪些内存需要回收？</p>
+</li>
+<li>
+<p>什么时候回收？</p>
+</li>
+<li>
+<p>如何回收？</p>
+</li>
+</ul>
+<p>垃圾收集机制是Java的招牌能力，极大地提高了开发效率。如今，垃圾收集几乎成为现代语言的标配，即使经过如此长时间的发展，Java的垃圾收集机制仍然在不断的演进中，不同大小的设备、不同特征的应用场景，对垃圾收集提出了新的挑战，这当然也是面试的热点。</p>
+<h2 id="1垃圾回收概述">1.	垃圾回收概述</h2>
+<h4 id="11什么是垃圾">1.1	什么是垃圾</h4>
+<p>垃圾是指在运行程序中没有任何指针指向的对象，这个对象就是需要被回收的垃圾。</p>
+<p>如果不及时对内存中的垃圾进行清理，那么，这些垃圾对象所占的内存空间会一直保留到应用程序的结束，被保留的空间无法被其它对象使用，甚至可能导致内存溢出。</p>
+<h4 id="12为什么需要垃圾回收">1.2	为什么需要垃圾回收</h4>
+<p>对于高级语言来说，一个基本认知是如果不进行垃圾回收，内存迟早都会被消耗完，因为不断地分配内存空间而不进行回收，就好像不停地生产生活垃圾而从来不打扫一样。</p>
+<p>除了释放没用的对象，垃圾回收也可以清除内存里的记录碎片。碎片整理将所占用的堆内存移到堆的一端，以便JVM将整理出的内存分配给新的对象。</p>
+<p>随着应用程序所应付的业务越来越庞大、复杂，用户越来越多，没有GC就不能保证应用程序的正常进行。而经常造成STW的GC又跟不上实际的需求，所以才会不断地尝试对GC进行优化。</p>
+<h4 id="13java垃圾回收机制">1.3	Java垃圾回收机制</h4>
+<p>自动内存管理，由JVM进行内存分配与回收，无需开发人员手动参与内存的分配与回收，这样降低内存泄漏和内存溢出的风险</p>
+<ul>
+<li>没有垃圾回收器，java也会和cpp一样，各种悬垂指针，野指针，泄露问题让你头疼不已。</li>
+</ul>
+<p>自动内存管理机制，将程序员从繁重的内存管理中释放出来，可以更专心地专注于业务开发</p>
+<p><strong>既然Java是自动内存管理，为什么我们需要学习JVM?</strong></p>
+<p>对于Java开发人员而言，自动内存管理就像是一个黑匣子，如果过度依赖于“自动”，那么这将会是一场灾难，最严重的就会弱化Java开发人员在程序出现内存溢出时定位问题和解决问题的能力。</p>
+<p>此时，了解JVM的自动内存分配和内存回收原理就显得非常重要，只有在真正了解JVM是如何管理内存后，我们才能够在遇见outofMemoryError时，快速地根据错误异常日志定位问题和解决问题。</p>
+<h4 id="14java-gc主要关注的区域">1.4	Java GC主要关注的区域</h4>
+<p><img src="/images/jvm06_1.jpg" alt="image-20220118201719691"></p>
+<p>**Java堆是垃圾收集器的工作重点，**并且垃圾收集器可以对年轻代回收，也可以对老年代回收，甚至是全栈和方法区的回收。</p>
+<p>从次数上讲：</p>
+<ul>
+<li>
+<p>频繁收集Young区</p>
+</li>
+<li>
+<p>较少收集Old区</p>
+</li>
+<li>
+<p>基本不收集Perm区（元空间）</p>
+</li>
+</ul>
+<h2 id="2垃圾回收算法">2.	垃圾回收算法</h2>
+<h3 id="21标记阶段判断哪些对象需要被回收">2.1	标记阶段（判断哪些对象需要被回收）</h3>
+<p>在堆里存放着几乎所有的Java对象实例，在GC执行垃圾回收之前，首先需要区分出内存中哪些是存活对象，哪些是已经死亡的对象。只有被标记为己经死亡的对象，GC才会在执行垃圾回收时，释放掉其所占用的内存空间，因此这个过程我们可以称为垃圾标记阶段。</p>
+<p>那么在JVM中究竟是如何标记一个死亡对象呢？简单来说，当一个对象已经不再被任何的存活对象继续引用时，就可以宣判为已经死亡。</p>
+<p>判断对象存活一般有两种方式：引用计数算法和<strong>可达性分析算法</strong>。</p>
+<h4 id="211引用计数法">2.1.1	引用计数法</h4>
+<p>引用计数算法（Reference Counting）比较简单，对每个对象保存一个整型的引用计数器属性。用于记录对象被引用的情况。</p>
+<p>对于一个对象A，只要有任何一个对象引用了A，则A的引用计数器就加1；当引用失效时，引用计数器就减1。只要对象A的引用计数器的值为0，即表示对象A不可能再被使用，可进行回收。</p>
+<p>优点：实现简单，垃圾对象便于辨识；判定效率高，回收没有延迟性。</p>
+<p>缺点：</p>
+<ul>
+<li>
+<p>它需要单独的字段存储计数器，这样的做法增加了存储空间的开销。</p>
+</li>
+<li>
+<p>每次赋值都需要更新计数器，伴随着加法和减法操作，这增加了时间开销。</p>
+</li>
+<li>
+<p>引用计数器有一个严重的问题，<strong>即无法处理循环引用的情况</strong>。这是一条致命缺陷，导致在Java的垃圾回收器中没有使用这类算法。</p>
+</li>
+</ul>
+<p><strong>循环引用</strong></p>
+<p><img src="/images/jvm06_2.jpg" alt="image-20220118202515940"></p>
+<h4 id="222可达性分析">2.2.2	可达性分析</h4>
+<p>相对于引用计数算法而言，可达性分析算法不仅同样具备实现简单和执行高效等特点，更重要的是该算法可以有效地解决在引用计数算法中循环引用的问题，防止内存泄漏的发生。</p>
+<p>相较于引用计数算法，这里的可达性分析就是Java、C#选择的。这种类型的垃圾收集通常也叫作追踪性垃圾收集（Tracing Garbage Collection）</p>
+<p>所谓&quot;GCRoots”根集合就是一组必须活跃的引用。</p>
+<p><strong>可达性分析步骤</strong></p>
+<ul>
+<li>
+<p>可达性分析算法是以根对象集合（GCRoots）为起始点，按照从上至下的方式搜索被根对象集合所连接的目标对象是否可达。</p>
+</li>
+<li>
+<p>使用可达性分析算法后，内存中的存活对象都会被根对象集合直接或间接连接着，搜索所走过的路径称为引用链（Reference Chain）</p>
+</li>
+<li>
+<p>如果目标对象没有任何引用链相连，则是不可达的，就意味着该对象己经死亡，可以标记为垃圾对象。</p>
+</li>
+<li>
+<p>在可达性分析算法中，只有能够被根对象集合直接或者间接连接的对象才是存活对象。</p>
+</li>
+</ul>
+<p><img src="/images/jvm06_3.jpg" alt="image-20220118202616867"></p>
+<p><strong>Notes</strong></p>
+<p>如果要使用可达性分析算法来判断内存是否可回收，那么分析工作必须在一个能保障一致性的快照中进行。这点不满足的话分析结果的准确性就无法保证。</p>
+<p>这点也是导致GC进行时必须“stop The World”的一个重要原因。</p>
+<ul>
+<li>即使是号称（几乎）不会发生停顿的CMS收集器中，枚举根节点时也是必须要停顿的。</li>
+</ul>
+<h4 id="223-finalization机制">2.2.3 Finalization机制</h4>
+<p>Java语言提供了对象终止（finalization）机制来允许开发人员提供对象被销毁之前的自定义处理逻辑。</p>
+<p>当垃圾回收器发现没有引用指向一个对象，即：垃圾回收此对象之前，总会先调用这个对象的finalize()方法。</p>
+<p>finalize() 方法允许在子类中被重写，用于在对象被回收时进行资源释放。通常在这个方法中进行一些资源释放和清理的工作，比如关闭文件、套接字和数据库连接等。</p>
+<p>永远不要主动调用某个对象的finalize()方法I应该交给垃圾回收机制调用。理由包括下面三点：</p>
+<ul>
+<li>
+<p>在finalize()时可能会导致对象复活。</p>
+</li>
+<li>
+<p>finalize()方法的执行时间是没有保障的，它完全由GC线程决定，极端情况下，若不发生GC，则finalize()方法将没有执行机会。</p>
+</li>
+<li>
+<p>一个糟糕的finalize()会严重影响GC的性能。</p>
+</li>
+</ul>
+<p>由于finalize()方法的存在，虚拟机中的对象一般处于三种可能的状态。</p>
+<ul>
+<li>
+<p>可触及的：从根节点开始，可以到达这个对象。</p>
+</li>
+<li>
+<p>可复活的：对象的所有引用都被释放，但是对象有可能在finalize()中复活。</p>
+</li>
+<li>
+<p>不可触及的：对象的finalize()被调用，并且没有复活，那么就会进入不可触及状态。不可触及的对象不可能被复活，因为finalize()只会被调用一次。</p>
+</li>
+</ul>
+<p>以上3种状态中，是由于finalize()方法的存在，进行的区分。只有在对象不可触及时才可以被回收。</p>
+<h5 id="具体过程">具体过程</h5>
+<p>判定一个对象objA是否可回收，至少要经历两次标记过程：</p>
+<ol>
+<li>
+<p>如果对象objA到GC Roots没有引用链，则进行第一次标记。</p>
+</li>
+<li>
+<p>进行筛选，判断此对象是否有必要执行finalize()方法</p>
+</li>
+<li>
+<p>如果对象objA没有重写finalize()方法，或者finalize()方法已经被虚拟机调用过，则虚拟机视为“没有必要执行”，objA被判定为不可触及的。</p>
+</li>
+<li>
+<p>如果对象objA重写了finalize()方法，且还未执行过，那么objA会被插入到F-Queue队列中，由一个虚拟机自动创建的、低优先级的Finalizer线程触发其finalize()方法执行。</p>
+</li>
+<li>
+<p>finalize()方法是对象逃脱死亡的最后机会，稍后GC会对F-Queue队列中的对象进行第二次标记。如果objA在finalize()方法中与引用链上的任何一个对象建立了联系，那么在第二次标记时，objA会被移出“即将回收”集合。之后，对象会再次出现没有引用存在的情况。在这个情况下，finalize方法不会被再次调用，对象会直接变成不可触及的状态，也就是说，一个对象的finalize方法只会被调用一次。</p>
+</li>
+</ol>
+<h3 id="22清除阶段">2.2	清除阶段</h3>
+<h4 id="221标记-清除算法">2.2.1	标记-清除算法</h4>
+<p>当堆中的有效内存空间（available memory）被耗尽的时候，就会停止整个程序（也被称为stop the world），然后进行两项工作，第一项则是标记，第二项则是清除</p>
+<ul>
+<li>
+<p>标记：Collector从引用根 节点开始遍历，标记所有被引用的对象。一般是在对象的Header中记录为可达对象。</p>
+</li>
+<li>
+<p>清除：Collector对堆内存从头到尾进行线性的遍历，如果发现某个对象在其Header中没有标记为可达对象，则将其回收</p>
+</li>
+</ul>
+<p><img src="/images/jvm06_4.jpg" alt="image-20220118203801471"></p>
+<h5 id="缺点">缺点</h5>
+<ul>
+<li>
+<p>标记清除算法的效率不算高</p>
+</li>
+<li>
+<p>在进行GC的时候，需要停止整个应用程序，用户体验较差</p>
+</li>
+<li>
+<p>这种方式清理出来的空闲内存是不连续的，产生内碎片，需要维护一个空闲列表</p>
+</li>
+</ul>
+<h5 id="何为清除">何为清除？</h5>
+<p>这里所谓的清除不是真的置空，而是把需要清除的对象地址保存在空闲的地址列表里。下次有新对象需要加载时，判断垃圾的位置空间是否够，如果够，就存放覆盖原有的地址。</p>
+<h4 id="222复制算法">2.2.2	复制算法</h4>
+<p>将活着的内存空间分为两块，每次只使用其中一块，在垃圾回收时将正在使用的内存中的存活对象复制到未被使用的内存块中，之后清除正在使用的内存块中的所有对象，交换两个内存的角色，最后完成垃圾回收</p>
+<p><img src="/images/jvm06_5.jpg" alt="image-20220118205110197"></p>
+<h5 id="优点">优点</h5>
+<ul>
+<li>
+<p>没有标记和清除过程，实现简单，运行高效</p>
+</li>
+<li>
+<p>复制过去以后保证空间的连续性，不会出现“碎片”问题。</p>
+</li>
+</ul>
+<h5 id="缺点-1">缺点</h5>
+<ul>
+<li>
+<p>此算法的缺点也是很明显的，就是需要两倍的内存空间。</p>
+</li>
+<li>
+<p>对于G1这种分拆成为大量region的GC，复制而不是移动，意味着GC需要维护region之间对象引用关系，不管是内存占用或者时间开销也不小</p>
+</li>
+</ul>
+<h4 id="223标记-压缩算法">2.2.3	标记-压缩算法</h4>
+<p>标记-压缩算法的最终效果等同于标记-清除算法执行完成后，再进行一次内存碎片整理，</p>
+<p><img src="/images/jvm06_6.jpg" alt="image-20220118205339535"></p>
+<h5 id="优点-1">优点</h5>
+<ul>
+<li>
+<p>消除了标记-清除算法当中，内存区域分散的缺点，我们需要给新对象分配内存时，JVM只需要持有一个内存的起始地址即可。</p>
+</li>
+<li>
+<p>消除了复制算法当中，内存减半的高额代价。</p>
+</li>
+</ul>
+<h5 id="缺点-2">缺点</h5>
+<ul>
+<li>
+<p>从效率上来说，标记-整理算法要低于复制算法。</p>
+</li>
+<li>
+<p>移动对象的同时，如果对象被其他对象引用，则还需要调整引用的地址</p>
+</li>
+<li>
+<p>移动过程中，需要全程暂停用户应用程序。即：STW</p>
+</li>
+</ul>
+<h4 id="224总结">2.2.4	总结</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Mark-Sweep</th>
+<th>Mark-Compact</th>
+<th>Copying</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>速率</strong></td>
+<td>中等</td>
+<td>最慢</td>
+<td>最快</td>
+</tr>
+<tr>
+<td><strong>空间开销</strong></td>
+<td>少（但会堆积碎片）</td>
+<td>少（不堆积碎片）</td>
+<td>通常需要活对象的2倍空间（不堆积碎片）</td>
+</tr>
+<tr>
+<td><strong>移动对象</strong></td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>效率上来说，复制算法是当之无愧的老大，但是却浪费了太多内存。</p>
+<p>而为了尽量兼顾上面提到的三个指标，标记-整理算法相对来说更平滑一些，但是效率上不尽如人意，它比复制算法多了一个标记的阶段，比标记-清除多了一个整理内存的阶段</p>
+<p>难道就没有一种最优算法吗？</p>
+<p>回答：无，没有最好的算法，只有最合适的算法。</p>
+<h3 id="heading"></h3>
+<h2 id="3分代收集算法">3.	分代收集算法</h2>
+<p>分代收集算法，是基于这样一个事实：不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采取不同的收集方式，以便提高回收效率。一般是把Java堆分为新生代和老年代，这样就可以根据各个年代的特点使用不同的回收算法，以提高垃圾回收的效率。</p>
+<p>在Java程序运行的过程中，会产生大量的对象，其中有些对象是与业务信息相关，比如Http请求中的Session对象、线程、Socket连接，这类对象跟业务直接挂钩，因此生命周期比较长。但是还有一些对象，主要是程序运行过程中生成的临时变量，这些对象生命周期会比较短，比如：String对象，由于其不变类的特性，系统会产生大量的这些对象，有些对象甚至只用一次即可回收。</p>
+<p>在HotSpot中，基于分代的概念，GC所使用的内存回收算法必须结合年轻代和老年代各自的特点。</p>
+<h4 id="年轻代young-gen">年轻代（Young Gen）</h4>
+<p>年轻代特点：区域相对老年代较小，对象生命周期短、存活率低，回收频繁。</p>
+<p>这种情况复制算法的回收整理，速度是最快的。复制算法的效率只和当前存活对象大小有关，因此很适用于年轻代的回收。而复制算法内存利用率不高的问题，通过hotspot中的两个survivor的设计得到缓解。</p>
+<h4 id="老年代tenured-gen">老年代（Tenured Gen）</h4>
+<p>老年代特点：区域较大，对象生命周期长、存活率高，回收不及年轻代频繁。</p>
+<p>这种情况存在大量存活率高的对象，复制算法明显变得不合适。一般是由标记-清除或者是标记-清除与标记-整理的混合实现。</p>
+<ul>
+<li>
+<p>Mark阶段的开销与存活对象的数量成正比。</p>
+</li>
+<li>
+<p>Sweep阶段的开销与所管理区域的大小成正相关。</p>
+</li>
+<li>
+<p>Compact阶段的开销与存活对象的数据成正比。</p>
+</li>
+</ul>
+<p>以HotSpot中的CMS回收器为例，CMS是基于Mark-Sweep实现的，对于对象的回收效率很高。而对于碎片问题，CMS采用基于Mark-Compact算法的Serial Old回收器作为补偿措施：当内存回收不佳（碎片导致的Concurrent Mode Failure时），将采用Serial Old执行Full GC以达到对老年代内存的整理。</p>
+<h2 id="4分区收集算法g1垃圾回收器会细讲">4.	分区收集算法（G1垃圾回收器会细讲）</h2>
+<p>一般来说，在相同条件下，堆空间越大，一次GC时所需要的时间就越长，有关GC产生的停顿也越长。为了更好地控制GC产生的停顿时间，将一块大的内存区域分割成多个小块，根据目标的停顿时间，每次合理地回收若干个小区间，而不是整个堆空间，从而减少一次GC所产生的停顿。</p>
+<p>分代算法将按照对象的生命周期长短划分成两个部分，分区算法将整个堆空间划分成连续的不同小区间。</p>
+<p>每一个小区间都独立使用，独立回收。这种算法的好处是可以控制一次回收多少个小区间。</p>
+<p><img src="/images/jvm06_7.jpg" alt="image-20220118205934850"></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Hengyu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2022-04-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/jvm07-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">JVM-7  垃圾回收相关概念</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/jvm05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">
+            <span class="next-text nav-default">JVM-5 执行引擎</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Hengyu</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
