@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Hengyu" /><meta name="description" content="事务隔离 1. 隔离性与隔离级别 读未提交：一个事务还没提交，它的变更可被看到 读提交：一个事务提交后，变更才可被看到 可重复读：一个事务中读取到的值，" /><meta name="keywords" content="Hugo, theme, even" />
+<meta name="author" content="Hengyu" /><meta name="description" content="事务隔离 ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。 1. 事务的ACID" /><meta name="keywords" content="Hugo, theme, even" />
 
 
 
@@ -40,19 +40,19 @@
 
 
 <meta property="og:title" content="MySql-3 事务" />
-<meta property="og:description" content="事务隔离 1. 隔离性与隔离级别 读未提交：一个事务还没提交，它的变更可被看到 读提交：一个事务提交后，变更才可被看到 可重复读：一个事务中读取到的值，" />
+<meta property="og:description" content="事务隔离 ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。 1. 事务的ACID" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/post/mysql3-%E4%BA%8B%E5%8A%A1/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-04-10T19:12:20&#43;08:00" />
 <meta property="article:modified_time" content="2022-04-10T19:12:20&#43;08:00" />
 
 <meta itemprop="name" content="MySql-3 事务">
-<meta itemprop="description" content="事务隔离 1. 隔离性与隔离级别 读未提交：一个事务还没提交，它的变更可被看到 读提交：一个事务提交后，变更才可被看到 可重复读：一个事务中读取到的值，"><meta itemprop="datePublished" content="2022-04-10T19:12:20&#43;08:00" />
+<meta itemprop="description" content="事务隔离 ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。 1. 事务的ACID"><meta itemprop="datePublished" content="2022-04-10T19:12:20&#43;08:00" />
 <meta itemprop="dateModified" content="2022-04-10T19:12:20&#43;08:00" />
-<meta itemprop="wordCount" content="309">
+<meta itemprop="wordCount" content="1566">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySql-3 事务"/>
-<meta name="twitter:description" content="事务隔离 1. 隔离性与隔离级别 读未提交：一个事务还没提交，它的变更可被看到 读提交：一个事务提交后，变更才可被看到 可重复读：一个事务中读取到的值，"/>
+<meta name="twitter:description" content="事务隔离 ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。 1. 事务的ACID"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -149,8 +149,9 @@
       <ul>
         <li>
           <ul>
-            <li><a href="#1隔离性与隔离级别">1.	隔离性与隔离级别</a></li>
-            <li><a href="#2事务的实现mvcc">2.	事务的实现：MVCC</a></li>
+            <li><a href="#1事务的acid">1.	事务的ACID</a></li>
+            <li><a href="#2隔离性与隔离级别">2.	隔离性与隔离级别</a></li>
+            <li><a href="#3mvcc">3.	MVCC</a></li>
           </ul>
         </li>
       </ul>
@@ -161,7 +162,16 @@
 </div>
     <div class="post-content">
       <h1 id="事务隔离">事务隔离</h1>
-<h3 id="1隔离性与隔离级别">1.	隔离性与隔离级别</h3>
+<p><strong>ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。</strong></p>
+<h3 id="1事务的acid">1.	事务的ACID</h3>
+<ol>
+<li>原子性(可中止性)：能够在错误时中止事务，丢弃该事务进行的所有写入变更的能力</li>
+<li>隔离性：同时执行的事务是相互隔离的</li>
+<li>持久性：持久性是一个承诺，即一旦事务成功完成，即使发生硬件故障或数据库崩溃，写入的任何数据也不会丢失</li>
+<li>一致性(可以称之为事务的目的)：一致性（在ACID意义上）是应用程序的属性</li>
+</ol>
+<p><strong>原子性，隔离性和持久性是数据库的属性，而一致性（在ACID意义上）是应用程序的属性。应用可能依赖数据库的原子性和隔离属性来实现一致性，但这并不仅取决于数据库</strong></p>
+<h3 id="2隔离性与隔离级别">2.	隔离性与隔离级别</h3>
 <ol>
 <li>读未提交：一个事务还没提交，它的变更可被看到</li>
 <li>读提交：一个事务提交后，变更才可被看到</li>
@@ -169,7 +179,26 @@
 <li>串行化：写会加锁，读会加锁，当读写锁出现冲突时，后访问的事务，必须要等到当前事务完成才能执行。</li>
 </ol>
 <p>在实现上，数据库里面会创建一个视图，访问的时候以视图的逻辑结果为准。在“可重复读”隔离级别下，这个视图是在事务启动时创建的，整个事务存在期间都用这个视图。在“读提交”隔离级别下，这个视图是在每个 SQL 语句开始执行的时候创建的。这里需要注意的是，“读未提交”隔离级别下直接返回记录上的最新值，没有视图概念；而“串行化”隔离级别下直接用加锁的方式来避免并行访问。</p>
-<h3 id="2事务的实现mvcc">2.	事务的实现：MVCC</h3>
+<h3 id="3mvcc">3.	MVCC</h3>
+<p>数据库必须可能保留一个对象的几个不同的提交版本，因为各种正在进行的事务可能需要看到数据库在不同的时间点的状态。当一个事务从数据库中读取时，<strong>事务ID用于决定它可以看见哪些对象</strong>，看不见哪些对象。通过仔细定义可见性规则，数据库可以向应用程序呈现<strong>一致的数据库快照</strong>。</p>
+<p>规则：</p>
+<ol>
+<li>每个事务都有一个事务ID,叫做transaction id(严格递增)</li>
+<li>事务在启动时,找到已提交的最大事务ID记为up_limit_id</li>
+<li>事务在更新一条语句时,比如id=1改为了id=2.会把id=1和该行之前的row trx_id写到undo log里, 并且在数据页上把id的值改为2,并且把修改这条语句的transaction id记在该行行头
+<ul>
+<li>Notes： 每行数据也都是有多个版本的。每次事务更新数据的时候，都会生成一个新的数据版本，并且把 transaction id 赋值给这个数据版本的事务 ID，记为 row trx_id。</li>
+</ul>
+</li>
+<li>再定一个规矩,一个事务要查看一条数据时,必须先用该事务的up_limit_id与该行的transaction id做比对, 如果up_limit_id&gt;=transaction id,那么可以看.如果up_limit_id&lt;transaction id,则只能去undo log里去取。去undo log查找数据的时候,也需要做比对,必须up_limit_id&gt;transaction id,才返回数据</li>
+</ol>
+<p><strong>MVCC的更新使用了这样一条规则：更新数据都是先读（即MVCC中的新版本视图）后写的，而这个读，只能读当前的值，称为“当前读”（current read）。</strong></p>
+<p><strong>当前读必须要读最新版本 如果此时该行数据上有事物尚未提交，则当前事务必须等待锁</strong></p>
+<p>在 MySQL 中，实际上每条记录在更新的时候都会同时记录一条回滚操作。记录上的最新值，通过回滚操作，都可以得到前一个状态的值。</p>
+<p>假设一个值从 1 被按顺序改成了 2、3、4，在回滚日志里面就会有类似下面的记录。</p>
+<p><img src="../../static/images/mysql04_1.jpg" alt="img"></p>
+<p>当前值是 4，但是在查询这条记录的时候，不同时刻启动的事务会有不同的 read-view。如图中看到的，在视图 A、B、C 里面，这一个记录的值分别是 1、2、4，同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）。对于 read-view A，要得到 1，就必须将当前值依次执行图中所有的回滚操作得到。</p>
+<p><strong>同时即使现在有另外一个事务正在将 4 改成 5，这个事务跟 read-view A、B、C 对应的事务是不会冲突的。</strong></p>
 
     </div>
 

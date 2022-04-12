@@ -49,7 +49,7 @@
 <meta itemprop="name" content="MySql-2 锁">
 <meta itemprop="description" content="锁 1. 全局锁 整个数据加锁变为只读状态，任何更新数据语句，更新表字段，建表语句都会被阻塞。 全局锁的典型使用场景是，做全库逻辑备份。也就是把整库每"><meta itemprop="datePublished" content="2022-04-10T19:12:02&#43;08:00" />
 <meta itemprop="dateModified" content="2022-04-10T19:12:02&#43;08:00" />
-<meta itemprop="wordCount" content="466">
+<meta itemprop="wordCount" content="796">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySql-2 锁"/>
 <meta name="twitter:description" content="锁 1. 全局锁 整个数据加锁变为只读状态，任何更新数据语句，更新表字段，建表语句都会被阻塞。 全局锁的典型使用场景是，做全库逻辑备份。也就是把整库每"/>
@@ -177,6 +177,17 @@
 <li>读写锁之间、写锁之间是互斥的，用来保证变更表结构操作的安全性。因此，如果有两个线程要同时给一个表加字段，其中一个要等另一个执行完才能开始执行。</li>
 </ul>
 <h3 id="3行锁">3.	行锁</h3>
+<p>行锁就是针对数据表中行记录的锁。比如事务 A 更新了一行，而这时候事务 B 也要更新同一行，则必须等事务 A 的操作完成后才能进行更新。</p>
+<h4 id="两阶段锁">两阶段锁</h4>
+<p>在 InnoDB 事务中，行锁是在需要的时候才加上的，但并不是不需要了就立刻释放，而是要等到事务结束时才释放。这个就是两阶段锁协议。</p>
+<p><strong>如果事务中需要锁多个行，要把最可能造成锁冲突、最可能影响并发度的锁尽量往后放。</strong></p>
+<h4 id="死锁和死锁检测">死锁和死锁检测</h4>
+<p>当并发系统中不同线程出现循环资源依赖，涉及的线程都在等待别的线程释放资源时，就会导致这几个线程都进入无限等待的状态，称为死锁。</p>
+<p>解决死锁的策略</p>
+<ol>
+<li>直接进入等待，直到超时。这个超时时间可以通过参数 innodb_lock_wait_timeout 来设置。</li>
+<li>发起死锁检测，发现死锁后，主动回滚死锁链条中的某一个事务，让其他事务得以继续执行。将参数 innodb_deadlock_detect 设置为 on，表示开启这个逻辑。</li>
+</ol>
 
     </div>
 
