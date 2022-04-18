@@ -49,7 +49,7 @@
 <meta itemprop="name" content="MySql-4 架构">
 <meta itemprop="description" content="MYSQL的基础架构 1. MYSQL架构 Mysql可分为Server层和存储引擎两部分。 1.1 Server层 Server层包括连接器、查询缓存、分析"><meta itemprop="datePublished" content="2022-04-10T19:12:32&#43;08:00" />
 <meta itemprop="dateModified" content="2022-04-10T19:12:32&#43;08:00" />
-<meta itemprop="wordCount" content="2205">
+<meta itemprop="wordCount" content="3037">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySql-4 架构"/>
 <meta name="twitter:description" content="MYSQL的基础架构 1. MYSQL架构 Mysql可分为Server层和存储引擎两部分。 1.1 Server层 Server层包括连接器、查询缓存、分析"/>
@@ -158,7 +158,11 @@
             <li></li>
           </ul>
         </li>
-        <li><a href="#14两阶段提交">1.4	两阶段提交</a></li>
+        <li><a href="#14两阶段提交">1.4	两阶段提交</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -197,7 +201,24 @@
 <h4 id="3binlog归档日志">3.	binlog(归档日志)</h4>
 <p>binlog是server层日志文件，将数据库所有的操作追加写到log中，作用是为了归档。</p>
 <p>对于事务表来说，一个事务中可能包含多条二进制日志事件，它们会在提交时一次性写入。而对于非事务表的操作，每次执行完语句就直接写入。</p>
-<h4 id="4log-buffer以redo-为例">4.	log buffer(以Redo 为例)</h4>
+<p>binlog的写入机制</p>
+<ol>
+<li>系统给 binlog cache 分配了一片内存，每个线程一个，参数 binlog_cache_size 用于控制单个线程内 binlog cache 所占内存的大小。如果超过了这个参数规定的大小，就要暂存到磁盘。</li>
+<li>把日志写到 binlog cache</li>
+<li>事务提交的时候，再把 binlog cache 写到 binlog 文件中（分为两步）
+<ol>
+<li>write：将日志写入文件系统的page cache，并没有把数据持久化到磁盘中</li>
+<li>fsync：将数据持久化到磁盘中</li>
+</ol>
+</li>
+</ol>
+<p>write 和 fsync 的时机，是由参数 sync_binlog 控制的：</p>
+<ol>
+<li>sync_binlog=0 的时候，表示每次提交事务都只 write，不 fsync；</li>
+<li>sync_binlog=1 的时候，表示每次提交事务都会执行 fsync；</li>
+<li>sync_binlog=N(N&gt;1) 的时候，表示每次提交事务都 write，但累积 N 个事务后才 fsync。</li>
+</ol>
+<h4 id="4redo-log-buffer">4.	redo log buffer</h4>
 <p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”。</p>
 <h5 id="日志的刷盘规则">日志的刷盘规则</h5>
 <ol>
@@ -227,6 +248,27 @@
 <li>脏页比例（<strong>平时要多关注脏页比例，不要让它经常接近 75%</strong>）</li>
 <li>redo log写入速度</li>
 </ol>
+<h5 id="redo-log-存储状态">redo log 存储状态</h5>
+<ol>
+<li>
+<p>存在 redo log buffer 中</p>
+</li>
+<li>
+<p>写到磁盘 (write)，但是没有持久化（fsync)</p>
+</li>
+<li>
+<p>持久化到磁盘</p>
+</li>
+</ol>
+<h5 id="redo-log的写入策略">redo log的写入策略</h5>
+<p>为了控制 redo log 的写入策略，InnoDB 提供了 innodb_flush_log_at_trx_commit 参数，它有三种可能取值：</p>
+<ol>
+<li>设置为 0 的时候，表示每次事务提交时都只是把 redo log 留在 redo log buffer 中 ;</li>
+<li>设置为 1 的时候，表示每次事务提交时都将 redo log 直接持久化到磁盘；</li>
+<li>设置为 2 的时候，表示每次事务提交时都只是把 redo log 写到 page cache。</li>
+</ol>
+<p>InnoDB 有一个后台线程，每隔 1 秒，就会把 redo log buffer 中的日志，调用 write 写到文件系统的 page cache，然后调用 fsync 持久化到磁盘。</p>
+<p>注意</p>
 <h4 id="ps-redo-log和bin-log的区别">PS ：redo log和bin log的区别</h4>
 <ol>
 <li>redo log是InnoDB引擎专有，binlog是server层中的（所有引擎都会有）</li>
@@ -246,6 +288,31 @@
 <li>先写 redo log 后写 binlog。假设在 redo log 写完，binlog 还没有写完的时候，MySQL 进程异常重启。由于我们前面说过的，redo log 写完之后，系统即使崩溃，仍然能够把数据恢复回来，所以恢复后这一行 c 的值是 1。但是由于 binlog 没写完就 crash 了，这时候 binlog 里面就没有记录这个语句。因此，之后备份日志的时候，存起来的 binlog 里面就没有这条语句。然后你会发现，如果需要用这个 binlog 来恢复临时库的话，由于这个语句的 binlog 丢失，这个临时库就会少了这一次更新，恢复出来的这一行 c 的值就是 0，与原库的值不同。</li>
 <li>先写 binlog 后写 redo log。如果在 binlog 写完之后 crash，由于 redo log 还没写，崩溃恢复以后这个事务无效，所以这一行 c 的值是 0。但是 binlog 里面已经记录了“把 c 从 0 改成 1”这个日志。所以，在之后用 binlog 来恢复的时候就多了一个事务出来，恢复出来的这一行 c 的值就是 1，与原库的值不同。</li>
 </ol>
+<h4 id="在两阶段提交的不同时刻mysql-异常重启会出现什么现象"><strong>在两阶段提交的不同时刻，MySQL 异常重启会出现什么现象。</strong></h4>
+<p><img src="../../static/images/mysql04_2.jpg" alt="img" style="zoom:50%;" /></p>
+<p>情况一：如果时刻A发生Crash</p>
+<p>处于prepare时刻，写binlog之前crash掉，直接回滚。</p>
+<p>情况二：如果时刻B发生crash</p>
+<ol>
+<li>如果 redo log 里面的事务是完整的，也就是已经有了 commit 标识，则直接提交</li>
+<li>如果 redo log 里面的事务只有完整的 prepare，则判断对应的事务 binlog 是否存在并完整
+<ol>
+<li>如果是，则提交事务</li>
+<li>否则，回滚事务</li>
+</ol>
+</li>
+</ol>
+<h4 id="mysql是如何判断binlog是否完整">Mysql是如何判断binlog是否完整</h4>
+<p>一个事务的 binlog 是有完整格式的</p>
+<ul>
+<li>statement 格式的 binlog，最后会有 COMMIT</li>
+<li>row 格式的 binlog，最后会有一个 XID event</li>
+</ul>
+<p>binlog和redo log都有一个字段XID，崩溃恢复时候，扫描redo log</p>
+<ul>
+<li>如果redo log中有prepare和commit，直接提交</li>
+<li>如果redo log只有prepare，就拿着 XID 去 binlog 找对应的事务。</li>
+</ul>
 
     </div>
 

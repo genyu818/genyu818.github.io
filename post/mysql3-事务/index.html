@@ -49,7 +49,7 @@
 <meta itemprop="name" content="MySql-3 事务">
 <meta itemprop="description" content="事务隔离 ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。 1. 事务的ACID"><meta itemprop="datePublished" content="2022-04-10T19:12:20&#43;08:00" />
 <meta itemprop="dateModified" content="2022-04-10T19:12:20&#43;08:00" />
-<meta itemprop="wordCount" content="1566">
+<meta itemprop="wordCount" content="2929">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySql-3 事务"/>
 <meta name="twitter:description" content="事务隔离 ACID数据库基于这样的哲学：如果数据库有违反其原子性，隔离性或持久性的危险，则宁愿完全放弃事务，而不是留下半成品。 1. 事务的ACID"/>
@@ -152,6 +152,7 @@
             <li><a href="#1事务的acid">1.	事务的ACID</a></li>
             <li><a href="#2隔离性与隔离级别">2.	隔离性与隔离级别</a></li>
             <li><a href="#3mvcc">3.	MVCC</a></li>
+            <li><a href="#4幻读">4.	幻读</a></li>
           </ul>
         </li>
       </ul>
@@ -199,6 +200,114 @@
 <p><img src="../../static/images/mysql04_1.jpg" alt="img"></p>
 <p>当前值是 4，但是在查询这条记录的时候，不同时刻启动的事务会有不同的 read-view。如图中看到的，在视图 A、B、C 里面，这一个记录的值分别是 1、2、4，同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）。对于 read-view A，要得到 1，就必须将当前值依次执行图中所有的回滚操作得到。</p>
 <p><strong>同时即使现在有另外一个事务正在将 4 改成 5，这个事务跟 read-view A、B、C 对应的事务是不会冲突的。</strong></p>
+<h3 id="4幻读">4.	幻读</h3>
+<h4 id="1什么是幻读">1.	什么是幻读？</h4>
+<p>幻读指的是一个事务在前后两次查询同一个范围的时候，后一次查询看到了前一次查询没有看到的行。</p>
+<p><strong>Notes:在可重复读隔离级别下，普通的查询是快照读，是不会看到别的事务插入的数据的。因此，幻读在“当前读”下才会出现。幻读仅专指“新插入的行”。</strong></p>
+<h4 id="2幻读存在的问题">2.	幻读存在的问题</h4>
+<ol>
+<li>破坏锁的语义</li>
+<li>数据一致性问题</li>
+</ol>
+<h4 id="3幻读产生的原因">3.	幻读产生的原因</h4>
+<p>即使给所有行加上了锁，也避免不了幻读，这是因为给行加锁的时候，这条记录还不存在，没法加锁)</p>
+<h4 id="4幻读例子">4.	幻读例子</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">t</span><span class="o">`</span><span class="w"> 
+</span><span class="w"></span><span class="p">(</span><span class="w"> 
+</span><span class="w"> </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> 
+</span><span class="w"> </span><span class="o">`</span><span class="k">c</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w"> </span><span class="o">`</span><span class="n">d</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="k">c</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="k">c</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">),(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h5 id="1假设只对一行加锁">1.	假设只对一行加锁</h5>
+<p><img src="../../static/images/mysql_01_1.jpg" alt="img"></p>
+<p>分析一下数据库中的结果</p>
+<ol>
+<li>T1时刻，id = 5这行变为(5,5,100)，当然这个结果最终是在 T6 时刻正式提交的 ;</li>
+<li>T2时刻，id = 0这行变为(0,5,5)</li>
+<li>T4时刻，先插入一行(1,1,5)，让后将id = 1这行变为(1,5,5)  <strong>(应该要将给 d=5 的语句加上锁，T4时刻即破坏了锁的语义)</strong></li>
+</ol>
+<p>分析一下bin log中的内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="n">T2时刻</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">d</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="cm">/*(0,0,5)*/</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">c</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="cm">/*(0,5,5)*/</span><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">T4时刻</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="cm">/*(1,1,5)*/</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">c</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="cm">/*(1,5,5)*/</span><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">T6时刻</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">d</span><span class="o">=</span><span class="mi">100</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">d</span><span class="o">=</span><span class="mi">5</span><span class="p">;</span><span class="cm">/*所有d=5的行，d改成100*/</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>此时就出现了问题，id=0 和 id=1 这两行，发生了数据不一致。这个问题很严重，是不行的。</p>
+<h5 id="2假设把扫描过程中碰到的行也都加上写锁">2.	假设把扫描过程中碰到的行，也都加上写锁</h5>
+<p><img src="../../static/images/mysql01_3.jpg" alt="img"></p>
+<p>bin log中的内容会是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="n">T4</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="cm">/*(1,1,5)*/</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">c</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="cm">/*(1,5,5)*/</span><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">T6</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">d</span><span class="o">=</span><span class="mi">100</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">d</span><span class="o">=</span><span class="mi">5</span><span class="p">;</span><span class="cm">/*所有d=5的行，d改成100*/</span><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">T2</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">d</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="cm">/*(0,0,5)*/</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">c</span><span class="o">=</span><span class="mi">5</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="cm">/*(0,5,5)*/</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>此时数据库结果为(0,5,5) <strong>(1,5,100)</strong> (5,5,100)，id=1的这行依旧不一致，也就是说，即使把所有的记录都加上锁，还是阻止不了新插入的记录。原因就是加锁的时候还没有id=1这行记录。</p>
+<h4 id="5如何解决幻读---间隙锁">5.	如何解决幻读 &ndash;	间隙锁</h4>
+<p>数据行是可以加上锁的实体，数据行之间的<strong>间隙</strong>，也是可以加上锁的实体。但是间隙锁跟我们之前碰到过的锁都不太一样。间隙锁和行锁合称 next-key lock，每个 <strong>next-key lock</strong> 是前开后闭区间。</p>
+<p>隙锁的引入，可能会导致同样的语句锁住更大的范围，这其实是影响了并发度的。</p>
+<p><strong>如果把隔离级别设置为读提交的话，就没有间隙锁了。但同时，如果要解决可能出现的数据和日志不一致问题，需要把 binlog 格式设置为 row。这，也是现在不少公司使用的配置组合。</strong></p>
+<p><strong>加锁的规则</strong></p>
+<ol>
+<li>原则 1：加锁的基本单位是 next-key lock。希望你还记得，next-key lock 是前开后闭区间。</li>
+<li>原则 2：查找过程中访问到的对象才会加锁。</li>
+<li>优化 1：索引上的等值查询，给唯一索引加锁的时候，next-key lock 退化为行锁。</li>
+<li>优化 2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock 退化为间隙锁。</li>
+<li>一个 bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止。</li>
+</ol>
 
     </div>
 
